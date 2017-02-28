@@ -1,0 +1,11 @@
+- pythfinder
+	- show ability to add modules for features (adaptability of basic pplication)
+	- showcase database design
+	- only character sheet management, no leveling yet
+- public bathroom mapper
+	- drop a pin
+	- cleanliness
+	- when it's busy
+	- times it's open
+- parking spot mapper
+	- times it's available

@@ -1,0 +1,140 @@
+- ego
+	- ego we go
+	- egotastic
+	- egomania
+	- ego we all go
+	- bare ego
+	- superego
+	- id and ego
+	- all that ego
+	- ultraego
+	- after ego
+	- **ego engineer**
+- science
+- things
+- engineer
+- develop
+- chemistry
+- spit ball
+- astronaut
+	- elastic astronaut
+	- **elastronaut**
+	- spaceman overboard
+- megalomania
+- power
+- reaction
+- enthusiastic
+- dumb
+- ditz
+- force
+- writer
+- poem
+- incense
+- social
+- friend
+- think
+- idea
+- fun
+- guilt
+- incompetent
+- imposter
+- medicine
+- bright
+- change
+- wander
+	- wander map
+	- random walk
+	- wander bust
+	- magic wander
+	- lazy wanderer
+	- aim and wander
+	- wander storm
+	- wander away
+	- wander over
+	- wander onto
+	- wander into
+	- want and wander
+- wonder
+- day dream
+	- day dreamer
+	- day dream weaver
+	- day dream catcher
+	- dream goalie
+	- dream pitcher
+- sleep
+- paint
+- art
+- sculpt
+- machine
+- gears
+	- cogs
+	- **cogs and curves**
+	- gears and curves
+	- curves and gears
+	- broken gear
+	- broken cog
+	- caught in gear
+	- gear shift
+	- shift gears
+	- cogs and wheels
+	- gears and color
+	- cogs and color
+	- **colored gears**
+	- cog toothache
+	- gear toothache
+	- gear tooth grin
+	- makeshift gears
+	- spinning gear
+	- plastic gears
+	- shredded gears
+	- spinning cognition
+	- **gear to the ground**
+- no moving parts
+	- solid state
+	- gearless chain
+	- no gears
+	- look ma no gears
+- wheel
+- generator
+- music
+	- a gear for music
+	- music to my gears
+- pattern
+	- pattern matching
+	- pattern recognition
+	- pattern cog
+	- pitter pattern
+- construct
+- venn
+- explore
+- expand
+- vision
+- stream
+- mind
+	- mind in a bind
+	- bind the mind
+	- mine the mind
+	- strip mind
+	- mind over pattern
+	- mind over scatter
+	- mind for gold
+	- gold mind
+	- diamond mind
+	- yours or mind
+	- mind and yours
+	- your hand in mind
+- perspective
+- far away
+- brain
+	- hare brained scheme
+	- square brain
+	- bare brain scheme
+	- bare brain power
+	- bare brain
+	- grain brain
+	- brain grain
+	- brain pain
+	- brain storm drain
+	- brain storm rain coat
+	- bare brain headbutt
+- half-baked
