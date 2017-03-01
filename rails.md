@@ -849,7 +849,7 @@ export FACEBOOK_KEY=<app_key>
 export FACEBOOK_SECRET=<secret_key>
 ```
 
-You're also going to need to remember to set the site URL and Domain to http://localhost:3000 and localhost (I think).
+You're also going to need to remember to do "Add Platform" > "Website", set the site URL and App Domain respectively to http://localhost:3000 and localhost.
 
 Then you should be able to throw a link in one of your views:
 
@@ -857,6 +857,65 @@ Then you should be able to throw a link in one of your views:
 <!-- app/views/static/home.html.erb -->
  
 <%= link_to("login with facebook!", "/auth/facebook") %>
+```
+
+_When you export those environment variables, either make a new terminal session to start the server or start it in the same terminal session, otherwise they won't be recognized, obviously. I forgot about this and tried to start the server in an existing (but separate) terminal session and couldn't figure out why it didn't recognize the keys._
+
+When you click that link, you'll be redirected to facebook, where you'll log in, and then facebook will redirect you (again) to your site's `/auth/facebook/callback` URL (or whatever provider). You don't have that set up yet, so make a route like this:
+
+```ruby
+# config/routes.rb
+
+...
+  get '/auth/facebook/callback', to: 'sessions#create'
+...
+```
+
+(or whatever controller action you're gonna use) and make the appropriate action in your controller.
+
+Facebook is gonna send us back a hash like this:
+
+```ruby
+{
+  "provider": "facebook",
+  "uid": "10154316774896935",
+  "info": {
+    "name": "Keegan Leitz",
+    "image": "http://graph.facebook.com/10154316774896935/picture"
+  },
+  "credentials": {
+    "token": "EAADKXa1MIiIBAMtOOfpoIYjN4qY9JXZAG3POabc01moRV9UZBYQuU87fxgZCNRLIkdAabbL1JTzBe5zH5vfIF64zfV1PhFqZBrgWAZBiJtUbZCXTL6rRRA96oFrug2MVNLeOAlpqnCZCadX6GZAD8AmFwQPVFDMGQB0ZD",
+    "expires_at": 1493570206,
+    "expires": true
+  },
+  "extra": {
+    "raw_info": {
+      "name": "Keegan Leitz",
+      "id": "10154316774896935"
+    }
+  }
+}
+```
+
+Omniauth will parse this and throw it in the "request environment", on `request.env['omniauth.auth']`. Abstract it with an `auth` method, and use that to construct a user (`User` model/migration code omitted, but you can imagine how it would work... one note: `uid` might be out of range for a simple integer, so you can make a 64-bit int with `t.integer :uid, limit: 8` in your migration):
+
+```ruby
+# app/controllers/sessions_controller.rb
+ 
+class SessionsController < ApplicationController
+ 
+  def create
+    user = User.find_or_create_by(:uid => auth['uid']) do |u|
+      u.name = auth['info']['name']
+      u.email = auth['info']['email']
+    end
+    session[:user_id] = user.id
+  end
+ 
+  def auth
+    request.env['omniauth.auth']
+  end
+end
 ```
 
 ## Views
