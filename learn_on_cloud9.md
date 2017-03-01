@@ -8,7 +8,7 @@ In this readme we are going to go over the steps for setting up your development
 
 ## Initialize a workspace
 
-Name it however you'd like, and select "Ruby" as the template environment you'd like to set up. Once Cloud9 has finished setting up the workspace, you will be able to type the following commands in the terminal at the bottom.
+Select "Create a Workspace". Name it however you'd like, and select "Ruby" as the template environment you'd like to set up. Once Cloud9 has finished setting up the workspace, you will be able to type the following commands in the terminal at the bottom.
 
 ## Set up group
 
@@ -16,6 +16,12 @@ He we are setting up a group with the name "npm". This is so that we can set rea
 
  - `sudo groupadd npm`
  - `sudo usermod -a -G npm,staff $USER`
+
+## Make sure everything is up to date
+
+Before we start installing all of our developer tools, we want to make sure that everything is up to date. For this, we're going to use the `apt-get` Linux package manager to update everything using the following commands:
+
+ - `sudo apt-get update`
 
 ## Installing Dev tools
 
