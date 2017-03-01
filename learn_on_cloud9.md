@@ -8,7 +8,7 @@ In this readme we are going to go over the steps for setting up your development
 
 ## Initialize a workspace
 
-Name it however you'd like, and select "Ruby" as the type of environment you'd like to set up. Once Cloud9 has finished setting up the workspace, you will be able to type the following commands in the terminal at the bottom.
+Name it however you'd like, and select "Ruby" as the template environment you'd like to set up. Once Cloud9 has finished setting up the workspace, you will be able to type the following commands in the terminal at the bottom.
 
 ## Set up group
 
