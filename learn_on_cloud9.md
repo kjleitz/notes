@@ -68,12 +68,7 @@ To set up your gems and install some necessary ones, run the following commands:
 
  - `echo "gem: --no-ri --no-rdoc" > $HOME/.gemrc`
  - `gem update --system 2.4.8`
- - `gem install learn-co`
- - `gem install phantomjs`
- - `gem install pg`
- - `gem install sqlite3`
- - `gem install bundler`
- - `gem install rails`
+ - `gem install learn-co phantomjs pg sqlite3 bundler rails`
 
 ## Installing a Node Pacakge
 
