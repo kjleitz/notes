@@ -830,6 +830,35 @@ Basically just clear the session. You can do `reset_session` or `session.clear`.
 
 ### Omniauth and the OAuth protocol
 
+Add `gem 'omniauth'` and `gem 'omniauth-facebook'` (or google, or whatever) to your Gemfile. Then, create a file at `config/initializers/omniauth.rb` with this middleware:
+
+```ruby
+# config/initializers/omniauth.rb
+
+Rails.application.config.middleware.use OmniAuth::Builder do
+  provider :facebook, ENV['FACEBOOK_KEY'], ENV['FACEBOOK_SECRET']
+end
+```
+
+That way you can pull from environment variables that you can set and not have it stored publicly on GitHub or whatever. Basically, you're gonna register your app with the provider you choose (facebook, google, etc.) and then they'll give you instructions on how to set it up.
+
+For facebook, follow their instructions to create an app, then grab the App ID and the Secret Key and set them as environment variables on your system:
+
+```bash
+export FACEBOOK_KEY=<app_key>
+export FACEBOOK_SECRET=<secret_key>
+```
+
+You're also going to need to remember to set the site URL and Domain to http://localhost:3000 and localhost (I think).
+
+Then you should be able to throw a link in one of your views:
+
+```html
+<!-- app/views/static/home.html.erb -->
+ 
+<%= link_to("login with facebook!", "/auth/facebook") %>
+```
+
 ## Views
 
 ### Files and structure
