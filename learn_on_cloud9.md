@@ -135,7 +135,7 @@ Those full commands are long and annoying to type out. Instead, we can make alia
 - `echo "alias rackup='rackup -p \$PORT -o \$IP'" >> ~/.bash_aliases`
 - `echo "alias shotgun='shotgun -p \$PORT -o \$IP'" >> ~/.bash_aliases`
 
-Now you can use `rackup` and `shotgun` like normal, and they will execute the full commands by default, no extra typing required!
+Now you can use `rackup` and `shotgun` like normal, and they will execute the full commands by default, no extra typing required! If you (for whatever reason) need to specify a different port or IP, you can still add `-p` and `-o` flags to these commands and they will overwrite the ones stored in the alias.
 
 Again, when you use one of these commands, a little window will pop up in the top right corner of the terminal which says "Your code is running at https://cloud9-learn-your\_c9\_username.c9users.io", and you can open that URL in a new tab to view your application being served.
 
