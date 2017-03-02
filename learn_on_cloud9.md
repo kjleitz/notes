@@ -130,6 +130,10 @@ Now you can use `rackup` and `shotgun` like normal, and they will execute the fu
 
 Again, when you use one of these commands, a little window will pop up in the top right corner of the terminal which says "Your code is running at https://cloud9-learn-your_c9_username.c9users.io", and you can open that URL in a new tab to view your application being served.
 
+## Seeing and using our bash configuration changes
+
+As one final step, close the terminal tab (not the whole pane, just the tab) with the little `x` in the corner of the tab which says `bash - "username-blahblah..."`. You will be left with a JavaScript REPL tab. Ignore that, click the little `+` next to it, and select "New Terminal". Now, most of the changes we made to our configuration files will be re-loaded, and you should even see the (potentially familiar) `// ♥ ` prompt string instead of the Cloud9 default `username:~/workspace $ `-style prompt string. Awesome!
+
 ## Opening labs
 
 To open the lab you are currently on, run the command `learn open`. If you want to open a specific lab that you are not currently on, copy the repository name from GitHub for that lab, and run `learn open some-repository-name-v-000` (or shorter, like this: `learn open some-repository-name`). This will create a `~/code/labs` directory where your labs will be stored. To view this directory in your Cloud9 workspace file tree (the left-hand sidebar), click the little gear icon at the top of the left-hand sidebar and select "Show Home in Favorites". You can also **un**select "Show Workspace Root" to keep your file tree a little less cluttered (you probably won't be needing the workspace files Cloud9 sets up for you, anyway).
