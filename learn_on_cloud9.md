@@ -91,7 +91,7 @@ One thing you'll see more of later in the course is npm, or [Node Package Manage
 
 ## Setting up your computer up with GitHub
 
-All of this courses content is stored on GitHub so you're going to have to do a lot of cloning (copying files from your GitHub account to your computer) and pushing (taking files you've saved on your computer, and updating your GitHub files with them).
+All of this course's content is stored on GitHub, so you're going to have to do a lot of cloning (copying files from your GitHub account to your computer) and pushing (taking files you've saved on your computer, and updating your GitHub files with them).
 
 It would be a real pain if you had to type in your password every time you wanted to perform one of these actions. Luckily you don't have to if you use an SSH key. You can set this up by following these steps:
 
