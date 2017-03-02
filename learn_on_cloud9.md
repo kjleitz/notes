@@ -1,25 +1,25 @@
 # Cloud9 Environment Setup
 
-Adapted from the [Ubuntu Environment Setup](https://github.com/learn-co-curriculum/linux-env-setup/blob/master/README.md).
+Adapted from the [Ubuntu Environment Setup](https://GitHub.com/learn-co-curriculum/linux-env-setup/blob/master/README.md).
 
 ## Setting up your Cloud9 Developer Environment
 
-In this readme we are going to go over the steps for setting up your development environment on Cloud9 (which runs Ubuntu, a Linux distribution).
+In this README, we will go over the steps for setting up your development environment in a Cloud9 workspace (which runs Ubuntu, a Linux distribution).
 
 ## Initialize a workspace
 
-Select "Create a Workspace". Name it `cloud9-learn`, describe it however you'd like ("A workspace for completing labs on Learn.co" would be simple and appropriate) and select "Ruby" as the template environment you'd like to set up. Finally, press "Create workspace". Once Cloud9 has finished setting up the workspace, you will be able to type the following commands in the terminal at the bottom.
+Select "Create a Workspace". Name it `cloud9-learn`, describe it however you'd like ("A workspace for completing labs on Learn.co" would be simple and appropriate), and select "Ruby" as the template environment you'd like to set up. Finally, press the "Create workspace" button. Once Cloud9 has finished setting up the workspace, you will be able to type the following commands in the terminal at the bottom.
 
 ## Set up group
 
-He we are setting up a group with the name "npm". This is so that we can set reasonable permissions on packages that get installed via npm (more on permissions and npm later). These permissions ensure that we can globally install npm packages.
+Here we are setting up a group with the name "npm". This is so that we can set reasonable permissions on packages that will be installed via npm (more on permissions and npm later). These permissions ensure that we can globally install npm packages.
 
  - `sudo groupadd npm`
  - `sudo usermod -a -G npm,staff $USER`
 
 ## Make sure everything is up to date
 
-Before we start installing all of our developer tools, we want to make sure that everything is up to date. For this, we're going to use the `apt-get` Linux package manager to update everything using the following commands:
+Before we start installing all of our developer tools, we want to make sure that the packages we install are all up to date. For this, we're going to use the `apt-get` Linux package manager to update our sources:
 
  - `sudo apt-get update`
 
@@ -27,7 +27,7 @@ Before we start installing all of our developer tools, we want to make sure that
 
 ### The essentials
 
-Now we can install some essential dev tools (postgres, node...) using curl:
+Now we can install some essential dev tools (postgres, node...) using `curl`:
 
  - `sudo apt-get -y install curl postgresql libpq-dev default-jre build-essential phantomjs`
  - `curl -sL https://deb.nodesource.com/setup_5.x | sudo -E bash -`
@@ -35,7 +35,7 @@ Now we can install some essential dev tools (postgres, node...) using curl:
 
 ## Setting file permissions
 
-To be able to properly use some of these tools, we need to manually set some of the permissions and owners of some of the recently installed files:
+To be able to properly use some of these tools, we need to manually set some of the permissions and ownership of some of the recently installed files:
 
  - `sudo chown root:staff /usr/bin`
  - `sudo chmod 0775 /usr/bin`
@@ -47,22 +47,22 @@ Take a look at [this page](http://www.perlfect.com/articles/chmod.shtml) if you 
 
 ## Set up .netrc file for the learn gem
 
-The learn gem needs this netrc file to work. The `.netrc` file is a standard location to store login/token info, so it is we store information needed for Learn.
+The learn gem needs this netrc file to work. The `.netrc` file is a standard location to store login/token info, so it is where we store information needed for Learn.
 
  - `touch ~/.netrc && chmod 0600 ~/.netrc`
 
 ## Using RVM to install Ruby
 
-[RVM](https://en.wikipedia.org/wiki/Ruby_Version_Manager) is a great tool that lets you run different versions of Ruby on your computer. This is really useful because if you know one project your working on works with Ruby version 2.1.0 and another needs 2.3.0, you can easily switch between the two versions when you switch between projects. It's already installed in your Cloud9 workspace, but you'll want to use it to install a slightly newer version of Ruby than the one installed by default. You can install it and set it up with the following commands:
+[RVM](https://en.wikipedia.org/wiki/Ruby_Version_Manager) is a great tool that lets you run different versions of Ruby on your computer. This is really useful because if you know one project you're working on works with Ruby version 2.1.0 and another needs 2.3.0, you can easily switch between the two versions when you switch between projects. It's already installed in your Cloud9 workspace, but you'll want to use it to install a slightly newer version of Ruby than the one installed by default. You can install it and set it up with the following commands:
 
  - `rvm install 2.3.1`
  - `rvm use 2.3.1 --default`
 
-You can easily install different Ruby verions with `rvm instal <version number>`, switch between versions with `rvm use <version number>` and check to see which you've already installed with `rvm list`. You can always check what version your current terminal window is with `ruby -v`. Later, you may want to also install the recent Ruby versions `2.3.3` and/or `2.4.0`, but that's up to you. You can always switch the one used by default with `rvm use <version number> --default`, or use one temporarily with `rvm use <version number>`. I'd come back to this after you've completed the environment setup, just for consistency.
+You can easily install different Ruby verions with `rvm install <version number>`, switch between versions with `rvm use <version number>` and check to see which you've already installed with `rvm list`. You can always check what version your current terminal window is with `ruby -v`. Later, you may want to also install the recent Ruby versions `2.3.3` and/or `2.4.0`, but that's up to you. You can always switch the one used by default with `rvm use <version number> --default`, or use one temporarily with `rvm use <version number>`. I'd come back to this _after_ you've completed the environment setup, just for consistency.
 
 ## Setting up (and getting) Ruby gems
 
-If your familiar with any other program language, [Ruby gems](https://en.wikipedia.org/wiki/RubyGems) are like libraries. If you're not familiar with programing libraries, it's basically isolated chunks of code that you can easily add to your project. For example, the `learn-co` gem allows you to easily interface with Learn from your command line (opening and submitting labs among many other things).
+If you're familiar with any other programming language, [Ruby gems](https://en.wikipedia.org/wiki/RubyGems) are like libraries. If you're not familiar with programming libraries, they are basically isolated chunks of code that you can easily add to your project. For example, the `learn-co` gem allows you to easily interface with Learn from your command line (opening and submitting labs, among many other things).
 
 To set up your gems and install some necessary ones, run the following commands:
 
@@ -77,35 +77,35 @@ One thing you'll see more of later in the course is npm, or [Node Package Manage
  - `sudo npm install -g n`
  - `sudo npm install -g protractor`
 
-## Setting up your computer up with Github
+## Setting up your computer up with GitHub
 
-All of this courses content is stored on Github so you're going to have to do a lot of cloning (copying files from your github account to your computer) and pushing (taking files you've saved on your computer, and updating your github files with them).
+All of this courses content is stored on GitHub so you're going to have to do a lot of cloning (copying files from your GitHub account to your computer) and pushing (taking files you've saved on your computer, and updating your GitHub files with them).
 
-It would be a real pain if you have to type your password in every time you wanted to perform one of these actions. Luckily you don't have to with an SSH key. You can set this up by following the following steps:
+It would be a real pain if you had to type in your password every time you wanted to perform one of these actions. Luckily you don't have to if you use an SSH key. You can set this up by following these steps:
 
- - `cat ~/.ssh/id_rsa.pub`. This will display the output of your SSH key to your terminal. You can then copy that, and add as ssh key on github by following the [instructions posted on github](https://help.github.com/articles/adding-a-new-ssh-key-to-your-github-account/). Note: The first step in these instructions is _the same_ as doing the `cat ~/.ssh/id_rsa.pub` command and manually copying the text.
- - You're also going to want to let the git that is running on your machine to know you you are. You can set this up by running: `git config --global user.email "you@example.com"` and `git config --global user.name "Your Name"`
+ - `cat ~/.ssh/id_rsa.pub` - This will display the output of your SSH key to your terminal. You can then copy that and add it as an SSH key on GitHub by following the [instructions posted on GitHub](https://help.GitHub.com/articles/adding-a-new-ssh-key-to-your-GitHub-account/). Note: The first step in these instructions is _the same_ as doing the `cat ~/.ssh/id_rsa.pub` command and manually copying the text, so you can skip it.
+ - You're also going to want to let the git that is running on Cloud9 to know who you are. You can set this up by running: `git config --global user.email "you@example.com"` and `git config --global user.name "Your Name"`
 
 ## Configure the Learn-Co gem
 
-Now that you have most of your tools installed, you're going to want to configure your learn-co gem. As previously mentioned, this gem lets you run tests, open labs, submit them, and save them to finish later. You can configure the gem to your account by using the following command:
+Now that you have most of your tools installed, you're going to want to configure your learn-co gem. As previously mentioned, this gem lets you run tests, open labs, submit them, and save them to finish later. You can configure the gem to be associated with your account by using the following command:
 
- - `learn whoami` and enter oauth token when asked (from https://learn.co/<github_username>)
+ - `learn whoami` - Then, enter your OAuth token when asked (go to your Learn.co profile at https://learn.co/<GitHub_username> and copy the OAuth token from the bottom of the page)
 
 ## Optional Dotfiles
 
-These dotfiles do a variety of different things and I highly recomend you download them.
+These dotfiles do a variety of different things and they are highly recommended, but optional. The command `curl` downloads a file from a URL and saves it to a file you specify after the `-o` flag.
 
- - `curl "https://raw.githubusercontent.com/flatiron-school/dotfiles/master/irbrc" -o "$HOME/.irbrc"` - This file gives you some nice formatting for when you're in IRB (IRB lets you write ruby code in your terminal)
- - `curl "https://raw.githubusercontent.com/flatiron-school/dotfiles/master/ubuntu-gitignore" -o "$HOME/.gitignore"` - Global .gitignore rules. When you add a .gitignore file to a project, it let's you specify certain files that you DO NOT want pushed up to github (like API keys...)
- - `curl "https://raw.githubusercontent.com/flatiron-school/dotfiles/master/linux_bash_profile" -o "$HOME/.bash_profile"` - Your bash profile loads up every time you open a terminal window. The Learn bash_profile is designed to load up a bunch of shortcuts for you as well as make sure that RVM loads up every time you open the terminal. I recommend you take a look at this file and even see if there are any shortcuts of your own that you'd like to add! Note: this will overwrite existing bash profile, so back up if you want to.
- - `curl "https://raw.githubusercontent.com/flatiron-school/dotfiles/master/linux_gitconfig" -o "$HOME/.gitconfig"` then `nano $HOME/.gitconfig` and edit what needs to be edited (github username and github email in a few places). To save a file in nano, press ctrl+O, then verify that the file name is what you would like, press 'enter', and finally press ctrl+X to quit nano.
+ - `curl "https://raw.GitHubusercontent.com/flatiron-school/dotfiles/master/irbrc" -o "$HOME/.irbrc"` - This file gives you some nice formatting for when you're in IRB (IRB lets you write ruby code in your terminal)
+ - `curl "https://raw.GitHubusercontent.com/flatiron-school/dotfiles/master/ubuntu-gitignore" -o "$HOME/.gitignore"` - Global .gitignore rules. When you add a .gitignore file to a project, it let's you specify certain files that you DO NOT want pushed up to GitHub (like API keys...)
+ - `curl "https://raw.GitHubusercontent.com/flatiron-school/dotfiles/master/linux_bash_profile" -o "$HOME/.bash_profile"` - Your bash profile loads up every time you open a terminal window. The Learn bash_profile is designed to load up a bunch of shortcuts for you, and makes sure RVM loads up every time you open the terminal.
+ - `curl "https://raw.GitHubusercontent.com/flatiron-school/dotfiles/master/linux_gitconfig" -o "$HOME/.gitconfig"` - Then, `nano $HOME/.gitconfig` and edit what might need to be edited (GitHub username and GitHub email in a few places). To save a file in nano, press ctrl+O, then verify that the file name is what you would like (it will already be filled in with the original filename, so you shouldn't have to change anything), then press 'enter', and finally press ctrl+X to quit nano.
 
 ## Using `rackup` and `shotgun`
 
 ### The full commands
 
-Normally, when you use `rackup` or `shotgun` to serve a site locally (e.g. with Sinatra), a local server is set up so that you can access it from _only_ your computer. However, Cloud9 is not your computer! You need to tell `rackup` and `shotgun` which IP address and port to serve your site on, so you can navigate to a URL it supplies to access it (as opposed to navigating to `http://localhost:9292` like normal). You will need to use the following commands to use `rackup` and `shotgun` on Cloud9 (you don't need to run these commands at the moment, just when you need to start a server with `rackup` or `shotgun` for your lessons):
+Normally, when you use `rackup` or `shotgun` to serve a site locally (e.g. with Sinatra), a local server is set up so that you can access it from _only_ your computer. However, Cloud9 is not your computer! You need to tell `rackup` and `shotgun` which IP address and port to serve your site with, so you can navigate to the URL it supplies to access it (as opposed to navigating to `http://localhost:9292` like normal). You will need to use the following commands to use `rackup` and `shotgun` on Cloud9 (you don't need to run these commands at the moment, just when you need to start a server with `rackup` or `shotgun` for your lessons):
 
 - `rackup -p $PORT -o $IP`
 - `shotgun -p $PORT -o $IP`
@@ -114,7 +114,7 @@ When you use one of these commands, a little window will pop up in the top right
 
 ### Setting up shortcuts
 
-Those full commands are long and annoying to type out. Instead, we're going to make aliases so you can use them more easily. Run the following commands:
+Those full commands are long and annoying to type out. Instead, we can make aliases so you can use them more easily. Run the following commands:
 
 - `echo "alias rackup='rackup -p \$PORT -o \$IP'" >> ~/.bash_aliases`
 - `echo "alias shotgun='shotgun -p \$PORT -o \$IP'" >> ~/.bash_aliases`
@@ -125,6 +125,6 @@ Again, when you use one of these commands, a little window will pop up in the to
 
 ## Opening labs
 
-To open the lab you are currently on, run the command `learn open`. If you want to open a specific lab, copy the repository name from GitHub for that lab, and run `learn open some-repository-name-v-000` (or shorter, like this: `learn open some-repository-name`). This will create a `~/Development/code` directory where your labs will be stored. To view this directory in your Cloud9 workspace file tree (the left-hand sidebar), click the little gear icon at the top right of the left-hand sidebar and select "Show Home in Favorites". You can also **un**select "Show Workspace Root" to keep your file tree a little less cluttered.
+To open the lab you are currently on, run the command `learn open`. If you want to open a specific lab that you are not currently on, copy the repository name from GitHub for that lab, and run `learn open some-repository-name-v-000` (or shorter, like this: `learn open some-repository-name`). This will create a `~/code/labs` directory where your labs will be stored. To view this directory in your Cloud9 workspace file tree (the left-hand sidebar), click the little gear icon at the top of the left-hand sidebar and select "Show Home in Favorites". You can also **un**select "Show Workspace Root" to keep your file tree a little less cluttered (you probably won't be needing the workspace files Cloud9 sets up for you, anyway).
 
 Now, you should be able to access your labs in the left-hand sidebar under `~/code/labs`!
