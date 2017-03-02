@@ -43,7 +43,7 @@ Now we can install some essential dev tools (postgres, node...) using `curl`:
 
  - `sudo apt-get -y install curl postgresql libpq-dev default-jre build-essential phantomjs`
  - `curl -sL https://deb.nodesource.com/setup_5.x | sudo -E bash -`
- - `sudo apt-get install nodejs`
+ - `sudo apt-get -y install nodejs`
 
 ## Setting file permissions
 
