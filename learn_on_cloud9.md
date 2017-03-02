@@ -6,6 +6,10 @@ Adapted from the [Ubuntu Environment Setup](https://GitHub.com/learn-co-curricul
 
 In this README, we will go over the steps for setting up your development environment in a Cloud9 workspace (which runs Ubuntu, a Linux distribution).
 
+## Sign up for Cloud9
+
+Go to https://c9.io and enter your email address to sign up. Enter your name, then enter a username (your GitHub username would be a good choice), then select "Student" and "Coursework" in the "Developer Type" section. Finally, enter your credit card information. You are signing up for a free account, so it should not charge your card (they just need to verify that you are an authentic user). **Carefully read the information they provide to verify that this is the case.** Finally, click the "I'm not a robot" checkbox, and press "Create an account". Well done! You've successfully created a Cloud9 account. Don't forget to set your password from the email that was sent to the address you provided, otherwise you may lose access to your account.
+
 ## Initialize a workspace
 
 Select "Create a Workspace". Name it `cloud9-learn`, describe it however you'd like ("A workspace for completing labs on Learn.co" would be simple and appropriate), and select "Ruby" as the template environment you'd like to set up. Finally, press the "Create workspace" button. Once Cloud9 has finished setting up the workspace, you will be able to type the following commands in the terminal at the bottom.
