@@ -130,6 +130,13 @@ Now you can use `rackup` and `shotgun` like normal, and they will execute the fu
 
 Again, when you use one of these commands, a little window will pop up in the top right corner of the terminal which says "Your code is running at https://cloud9-learn-your_c9_username.c9users.io", and you can open that URL in a new tab to view your application being served.
 
+## Starting out in the lab directory
+
+These commands create a `labs` directory if there isn't one, and makes sure you always start out in the labs directory in the terminal, so you can easily `cd` into an existing lab:
+
+- `mkdir ~/code/labs` - If you get an error saying that this directory already exists, that's perfectly fine
+- `echo "cd ~/code/labs" >> ~/.bash_profile` - This adds a final line to your `.bash_profile` that ensures that you start out in the `labs` directory when you make a new terminal window
+
 ## Seeing and using our bash configuration changes
 
 As one final step, close the terminal tab (not the whole pane, just the tab) with the little `x` in the corner of the tab which says `bash - "username-blahblah..."`. You will be left with a JavaScript REPL tab. Ignore that, click the little `+` next to it, and select "New Terminal". Now, most of the changes we made to our configuration files will be re-loaded, and you should even see the (potentially familiar) `// ♥ ` prompt string instead of the Cloud9 default `username:~/workspace $ `-style prompt string. Awesome!
