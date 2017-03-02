@@ -10,6 +10,14 @@ In this README, we will go over the steps for setting up your development enviro
 
 Select "Create a Workspace". Name it `cloud9-learn`, describe it however you'd like ("A workspace for completing labs on Learn.co" would be simple and appropriate), and select "Ruby" as the template environment you'd like to set up. Finally, press the "Create workspace" button. Once Cloud9 has finished setting up the workspace, you will be able to type the following commands in the terminal at the bottom.
 
+## Entering commands
+
+The commands provided in this guide are meant to be typed into the terminal pane at the bottom of your Cloud9 workspace. Here are some common tips for beginners to the command line:
+
+ - You will need to use the arrow keys to move your cursor (the black rectangle), as clicking with your mouse won't move it to the position you want, unlike normal text editors
+ - If you want to re-enter a previous command, but you don't want to re-type it, you can hit the up arrow on your keyboard to recall commands you have recently entered, then edit those commands however you like (press 'enter' to run them, like a regular command)
+ - If you enter a command and nothing happens, that's okay. If you knew what you were doing and you were _expecting_ something to happen, of course that's an issue... but many of the commands listed in this guide do not have any output, and it's perfectly normal for that command to go gentle into that good night
+
 ## Set up group
 
 Here we are setting up a group with the name "npm". This is so that we can set reasonable permissions on packages that will be installed via npm (more on permissions and npm later). These permissions ensure that we can globally install npm packages.
