@@ -84,7 +84,7 @@ To set up your gems and install some necessary ones, run the following commands:
 
 ## Installing a Node Pacakge
 
-One thing you'll see more of later in the course is npm, or [Node Package Manager](https://en.wikipedia.org/wiki/Npm_(software)). This is very similar to Ruby gems, but it's for JavaScript. We're also going to do a global install for an npm testing package Protractor with the following command:
+One thing you'll see more of later in the course is npm, or [Node Package Manager](https://en.wikipedia.org/wiki/Npm_(software)). This is very similar to Ruby gems, but it's for JavaScript. We're going to do a global install for a Node.js version manager and an npm testing package Protractor with the following commands:
 
  - `sudo npm install -g n`
  - `sudo npm install -g protractor`
