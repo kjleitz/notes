@@ -108,9 +108,14 @@ Now that you have most of your tools installed, you're going to want to configur
 These dotfiles do a variety of different things and they are highly recommended, but optional. The command `curl` downloads a file from a URL and saves it to a file you specify after the `-o` flag.
 
  - `curl "https://raw.githubusercontent.com/flatiron-school/dotfiles/master/irbrc" -o "$HOME/.irbrc"` - This file gives you some nice formatting for when you're in IRB (IRB lets you write ruby code in your terminal)
+
  - `curl "https://raw.githubusercontent.com/flatiron-school/dotfiles/master/ubuntu-gitignore" -o "$HOME/.gitignore"` - Global .gitignore rules. When you add a .gitignore file to a project, it let's you specify certain files that you DO NOT want pushed up to GitHub (like API keys...)
+
  - `curl "https://raw.githubusercontent.com/flatiron-school/dotfiles/master/linux_bash_profile" -o "$HOME/.bash_profile"` - Your bash profile loads up every time you open a terminal window. The Learn bash_profile is designed to load up a bunch of shortcuts for you, and makes sure RVM loads up every time you open the terminal.
- - `curl "https://raw.githubusercontent.com/flatiron-school/dotfiles/master/linux_gitconfig" -o "$HOME/.gitconfig"` - Then, `nano $HOME/.gitconfig` and edit what needs to be edited by arrow-ing to the placeholder spots, deleting them, and replacing them with the appropriate values (GitHub username and GitHub email in a few places). To save a file in nano, press ctrl+O, then verify that the file name is what you would like (it will already be filled in with the original filename, so you shouldn't have to change anything), then press 'enter', and finally press ctrl+X to quit nano.
+    - After doing this, you must run `nano ~/.bash_profile`, then arrow down to the line that reads `export PATH="$USR_PATHS:$PATH"`. Add a `#` in front of it so it now reads `#export PATH="$USR_PATHS:$PATH"`. This will comment the line out. If you don't do this, you will get errors when trying to use gems (even the `learn` gem). Now, press ctrl+O _(saves the file)_, then 'enter' _(confirms the file name)_, then ctrl+X _(exits nano)_.
+
+ - `curl "https://raw.githubusercontent.com/flatiron-school/dotfiles/master/linux_gitconfig" -o "$HOME/.gitconfig"`
+    - After doing this, run `nano $HOME/.gitconfig` and edit what needs to be edited by arrow-ing to the placeholder spots, deleting them, and replacing them with the appropriate values (GitHub username and GitHub email in a few places). Now, press ctrl+O _(saves the file)_, then 'enter' _(confirms the file name)_, then ctrl+X _(exits nano)_.
 
 ## Using `rackup` and `shotgun`
 
