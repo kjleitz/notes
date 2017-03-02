@@ -95,7 +95,7 @@ All of this courses content is stored on GitHub so you're going to have to do a 
 
 It would be a real pain if you had to type in your password every time you wanted to perform one of these actions. Luckily you don't have to if you use an SSH key. You can set this up by following these steps:
 
- - `cat ~/.ssh/id_rsa.pub` - This will display the output of your SSH key to your terminal. You can then copy that and add it as an SSH key on GitHub by following the [instructions posted on GitHub](https://help.GitHub.com/articles/adding-a-new-ssh-key-to-your-GitHub-account/). Note: The first step in these instructions is _the same_ as doing the `cat ~/.ssh/id_rsa.pub` command and manually copying the text, so you can skip it.
+ - `cat ~/.ssh/id_rsa.pub` - This will display the output of your SSH key to your terminal. You can then copy that and add it as an SSH key on GitHub by following the [instructions posted on GitHub](https://help.GitHub.com/articles/adding-a-new-ssh-key-to-your-github-account/). Note: The first step in these instructions is _the same_ as doing the `cat ~/.ssh/id_rsa.pub` command and manually copying the text, so you can skip it.
 
 ## Configure the Learn-Co gem
 
