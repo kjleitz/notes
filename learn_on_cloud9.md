@@ -154,4 +154,4 @@ As one final step, close the terminal tab (not the whole pane, just the tab) wit
 
 To open the lab you are currently on, run the command `learn open`. If you want to open a specific lab that you are not currently on, copy the repository name from GitHub for that lab, and run `learn open some-repository-name-v-000` (or shorter, like this: `learn open some-repository-name`). This will create a `~/code/labs` directory where your labs will be stored. To view this directory in your Cloud9 workspace file tree (the left-hand sidebar), click the little gear icon at the top of the left-hand sidebar and select "Show Home in Favorites". You can also **un**select "Show Workspace Root" to keep your file tree a little less cluttered (you probably won't be needing the workspace files Cloud9 sets up for you, anyway).
 
-Now, you should be able to access your labs in the left-hand sidebar under `~/code/labs`!
+Now, you should be able to access your labs in the left-hand sidebar under `~/code/labs`! Sweet!
