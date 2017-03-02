@@ -75,7 +75,7 @@ If you're familiar with any other programming language, [Ruby gems](https://en.w
 To set up your gems and install some necessary ones, run the following commands:
 
  - `echo "gem: --no-ri --no-rdoc" > $HOME/.gemrc`
- - `gem update --system 2.4.8`
+ - `gem update --system`
  - `gem install learn-co phantomjs pg sqlite3 bundler rails`
 
 ## Installing a Node Pacakge
