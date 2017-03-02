@@ -8,7 +8,7 @@ In this readme we are going to go over the steps for setting up your development
 
 ## Initialize a workspace
 
-Select "Create a Workspace". Name it however you'd like, and select "Ruby" as the template environment you'd like to set up. Once Cloud9 has finished setting up the workspace, you will be able to type the following commands in the terminal at the bottom.
+Select "Create a Workspace". Name it `cloud9-learn`, describe it however you'd like ("A workspace for completing labs on Learn.co" would be simple and appropriate) and select "Ruby" as the template environment you'd like to set up. Finally, press "Create workspace". Once Cloud9 has finished setting up the workspace, you will be able to type the following commands in the terminal at the bottom.
 
 ## Set up group
 
@@ -83,8 +83,7 @@ All of this courses content is stored on Github so you're going to have to do a 
 
 It would be a real pain if you have to type your password in every time you wanted to perform one of these actions. Luckily you don't have to with an SSH key. You can set this up by following the following steps:
 
- - `ssh-keygen` (ONLY DO THIS IF YOU DON'T ALREADY HAVE A GENERATED SSH KEY: just press return for everything, and don't enter a passphrase)
- - `cat ~/.ssh/id_rsa.pub`. This will disply the output of your SSH key to your terminal. You can then copy that, and add as ssh key on github by following the [instructions posted on github](https://help.github.com/articles/adding-a-new-ssh-key-to-your-github-account/). Note: The first step in these instructions is _the same_ as doing the `cat ~/.ssh/id_rsa.pub` command and manually copying the text.
+ - `cat ~/.ssh/id_rsa.pub`. This will display the output of your SSH key to your terminal. You can then copy that, and add as ssh key on github by following the [instructions posted on github](https://help.github.com/articles/adding-a-new-ssh-key-to-your-github-account/). Note: The first step in these instructions is _the same_ as doing the `cat ~/.ssh/id_rsa.pub` command and manually copying the text.
  - You're also going to want to let the git that is running on your machine to know you you are. You can set this up by running: `git config --global user.email "you@example.com"` and `git config --global user.name "Your Name"`
 
 ## Configure the Learn-Co gem
@@ -100,18 +99,32 @@ These dotfiles do a variety of different things and I highly recomend you downlo
  - `curl "https://raw.githubusercontent.com/flatiron-school/dotfiles/master/irbrc" -o "$HOME/.irbrc"` - This file gives you some nice formatting for when you're in IRB (IRB lets you write ruby code in your terminal)
  - `curl "https://raw.githubusercontent.com/flatiron-school/dotfiles/master/ubuntu-gitignore" -o "$HOME/.gitignore"` - Global .gitignore rules. When you add a .gitignore file to a project, it let's you specify certain files that you DO NOT want pushed up to github (like API keys...)
  - `curl "https://raw.githubusercontent.com/flatiron-school/dotfiles/master/linux_bash_profile" -o "$HOME/.bash_profile"` - Your bash profile loads up every time you open a terminal window. The Learn bash_profile is designed to load up a bunch of shortcuts for you as well as make sure that RVM loads up every time you open the terminal. I recommend you take a look at this file and even see if there are any shortcuts of your own that you'd like to add! Note: this will overwrite existing bash profile, so back up if you want to.
- - `curl "https://raw.githubusercontent.com/flatiron-school/dotfiles/master/linux_gitconfig" -o "$HOME/.gitconfig"` then `nano $HOME/.gitconfig` and edit what needs to be edited (github username and github email in a few places)
+ - `curl "https://raw.githubusercontent.com/flatiron-school/dotfiles/master/linux_gitconfig" -o "$HOME/.gitconfig"` then `nano $HOME/.gitconfig` and edit what needs to be edited (github username and github email in a few places). To save a file in nano, press ctrl+O, then verify that the file name is what you would like, press 'enter', and finally press ctrl+X to quit nano.
 
 ## Using `rackup` and `shotgun`
 
-Normally, when you use `rackup` or `shotgun` to serve a site locally (e.g. with Sinatra), a local server is set up so that you can access it from _only_ your computer. However, Cloud9 is not your computer! You need to tell `rackup` and `shotgun` which IP address and port to serve your site on, so you can use its built-in browser to access it (as opposed to opening a new tab and navigating to `http://localhost:9292` like normal). You can use the following commands to do the equivalent of `rackup` and `shotgun` in your Cloud9 workspace (you don't need to run these right now):
+### The full commands
+
+Normally, when you use `rackup` or `shotgun` to serve a site locally (e.g. with Sinatra), a local server is set up so that you can access it from _only_ your computer. However, Cloud9 is not your computer! You need to tell `rackup` and `shotgun` which IP address and port to serve your site on, so you can navigate to a URL it supplies to access it (as opposed to navigating to `http://localhost:9292` like normal). You will need to use the following commands to use `rackup` and `shotgun` on Cloud9 (you don't need to run these commands at the moment, just when you need to start a server with `rackup` or `shotgun` for your lessons):
 
 - `rackup -p $PORT -o $IP`
 - `shotgun -p $PORT -o $IP`
 
-But those are long and annoying to type out. Instead, we're going to make aliases so you can use them more easily. Run the following commands:
+When you use one of these commands, a little window will pop up in the top right corner of the terminal which says "Your code is running at https://cloud9-learn-your_c9_username.c9users.io", and you can open that URL in a new tab to view your application being served.
 
-- `echo "alias ru='rackup -p $PORT -o $IP'"`
-- `echo "alias sgun='shotgun -p $PORT -o $IP'"`
+### Setting up shortcuts
 
-Now, if you want to use the `rackup` command, just do `ru` instead. If you want to use the `shotgun` command, do `sgun` instead.
+Those full commands are long and annoying to type out. Instead, we're going to make aliases so you can use them more easily. Run the following commands:
+
+- `echo "alias rackup='rackup -p \$PORT -o \$IP'" >> ~/.bash_aliases`
+- `echo "alias shotgun='shotgun -p \$PORT -o \$IP'" >> ~/.bash_aliases`
+
+Now you can use `rackup` and `shotgun` like normal, and they will execute the full commands by default, no extra typing required!
+
+Again, when you use one of these commands, a little window will pop up in the top right corner of the terminal which says "Your code is running at https://cloud9-learn-your_c9_username.c9users.io", and you can open that URL in a new tab to view your application being served.
+
+## Opening labs
+
+To open the lab you are currently on, run the command `learn open`. If you want to open a specific lab, copy the repository name from GitHub for that lab, and run `learn open some-repository-name-v-000` (or shorter, like this: `learn open some-repository-name`). This will create a `~/Development/code` directory where your labs will be stored. To view this directory in your Cloud9 workspace file tree (the left-hand sidebar), click the little gear icon at the top right of the left-hand sidebar and select "Show Home in Favorites". You can also **un**select "Show Workspace Root" to keep your file tree a little less cluttered.
+
+Now, you should be able to access your labs in the left-hand sidebar under `~/code/labs`!
