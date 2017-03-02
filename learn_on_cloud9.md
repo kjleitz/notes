@@ -121,7 +121,7 @@ Normally, when you use `rackup` or `shotgun` to serve a site locally (e.g. with 
 - `rackup -p $PORT -o $IP`
 - `shotgun -p $PORT -o $IP`
 
-When you use one of these commands, a little window will pop up in the top right corner of the terminal which says "Your code is running at https://cloud9-learn-your_c9_username.c9users.io", and you can open that URL in a new tab to view your application being served.
+When you use one of these commands, a little window will pop up in the top right corner of the terminal which says "Your code is running at https://cloud9-learn-your\_c9\_username.c9users.io", and you can open that URL in a new tab to view your application being served.
 
 ### Setting up shortcuts
 
@@ -132,7 +132,7 @@ Those full commands are long and annoying to type out. Instead, we can make alia
 
 Now you can use `rackup` and `shotgun` like normal, and they will execute the full commands by default, no extra typing required!
 
-Again, when you use one of these commands, a little window will pop up in the top right corner of the terminal which says "Your code is running at https://cloud9-learn-your_c9_username.c9users.io", and you can open that URL in a new tab to view your application being served.
+Again, when you use one of these commands, a little window will pop up in the top right corner of the terminal which says "Your code is running at https://cloud9-learn-your\_c9\_username.c9users.io", and you can open that URL in a new tab to view your application being served.
 
 ## Starting out in the lab directory
 
