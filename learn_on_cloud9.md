@@ -12,7 +12,7 @@ Go to https://c9.io and enter your email address to sign up. Enter your name, th
 
 ## Initialize a workspace
 
-Select "Create a Workspace". Name it `cloud9-learn`, describe it however you'd like ("A workspace for completing labs on Learn.co" would be simple and appropriate), and select "Ruby" as the template environment you'd like to set up. Finally, press the "Create workspace" button. Once Cloud9 has finished setting up the workspace, you will be able to type the following commands in the terminal at the bottom.
+Select "Create a Workspace". Name it `cloud9-learn`, describe it however you'd like ("A workspace for completing labs on Learn.co" would be simple and appropriate), and select "Ruby" as the template environment you'd like to set up. Finally, press the "Create workspace" button. Once Cloud9 has finished setting up the workspace, you will be able to type the following commands in the terminal at the bottom. You can also click on the little gray circles around the interface to get tips on how to use the UI.
 
 ## Entering commands
 
