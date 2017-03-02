@@ -82,7 +82,7 @@ To set up your gems and install some necessary ones, run the following commands:
  - `gem update --system`
  - `gem install learn-co phantomjs pg sqlite3 bundler rails`
 
-## Installing a Node Pacakge
+## Installing a Node Package
 
 One thing you'll see more of later in the course is npm, or [Node Package Manager](https://en.wikipedia.org/wiki/Npm_(software)). This is very similar to Ruby gems, but it's for JavaScript. We're going to do a global install for a Node.js version manager and an npm testing package Protractor with the following commands:
 
