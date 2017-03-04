@@ -918,6 +918,12 @@ class SessionsController < ApplicationController
 end
 ```
 
+### Devise for authentication
+
+You can use Devise to send confirmation emails, lock user accounts after a certain number of failed login attempts, and send password resets. You can also use it to allow multiple models to be signed in, each with different roles, granting different permissions.
+
+See more about Devise in [the Devise notes](devise.md).
+
 ## Views
 
 ### Files and structure
