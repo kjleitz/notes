@@ -1,5 +1,9 @@
 # CanCanCan notes
 
+Check out the docs [here](https://github.com/CanCanCommunity/cancancan/wiki/defining-abilities).
+
+Much of this is taken from [here](https://github.com/learn-co-students/cancan_readme-v-000).
+
 CanCanCan is a gem which lets you _authorize_ (not authenticate) users to perform actions.
 
 ## Basic usage
