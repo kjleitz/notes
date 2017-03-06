@@ -143,4 +143,4 @@ This is an example `Ability` class where a user can:
 - `manage` a `Post` as long as:
     - the user is an `admin`
 
-The action `manage` is a special CanCanCan action which means "any action". So, that last line means that, if a user's `admin` column is set to `true`, they can do anything they want with any `Post`.
+The action `manage` is a special CanCanCan action which means "any action". So, that last line means that, if a user's `admin` column is set to `true`, they can do anything they want with any `Post`. A similar concept is `:any`, which matches any model (e.g. `can :manage, :any` means the user can do anything they want with any target model).
