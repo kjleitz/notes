@@ -397,6 +397,26 @@ end
 
 Otherwise, ActiveRecord would default to using `user_id` when looking it up by the foreign key.
 
+You might have a join table in certain contexts where you need to access members through it and they need to be named something else:
+
+```ruby
+# user.rb
+has_many :notes
+has_many :viewers
+has_many :readable, through: :viewers, source: :note
+ 
+# note.rb
+belongs_to :user
+has_many :viewers
+has_many :readers, through: :viewers, source: :user
+
+# viewer.rb
+belongs_to :user
+belongs_to :note
+```
+
+In that example, `viewers` is a join table denoting which notes can be read by which user.
+
 ### Using associations
 
 [This](https://www.youtube.com/watch?v=5dqPYRsQd10) is a great Avi video on ActiveRecord Associations and their macros.
