@@ -232,6 +232,8 @@ class User < ActiveRecord::Base
 end
 ```
 
+(gives the user a safe dummy password)
+
 You'll get a missing template error. That's because `sign_in_and_redirect` needs to know what to do. Put this in your `ApplicationController`:
 
 ```ruby
