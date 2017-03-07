@@ -924,6 +924,12 @@ You can use Devise to send confirmation emails, lock user accounts after a certa
 
 See more about Devise in [the Devise notes](devise.md).
 
+## Authorization
+
+Authorization is distinct from Authentication in that it governs what a user can _do_, not whether the user is who they say they are. [This is a fantastic video](https://www.youtube.com/watch?v=wsbfUc-CPbg) of Avi going through Authorization patterns and metaprogramming.
+
+CanCanCan is a gem that provides a lot of this functionality. See more about CanCanCan in [the CanCanCan notes](cancancan.md).
+
 ## Views
 
 ### Files and structure
