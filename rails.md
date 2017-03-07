@@ -952,7 +952,7 @@ user.admin?
 user.role == 2
 ```
 
-So cool. The role `enum` is stored as an integer in the database (do I have to add it as a column?).
+So cool. The role `enum` is stored as an integer in the database (do I have to add it as a column? **edit: yes**).
 
 #### Checking if a user is a guest
 
