@@ -930,6 +930,86 @@ Authorization is distinct from Authentication in that it governs what a user can
 
 CanCanCan is a gem that provides a lot of this functionality. See more about CanCanCan in [the CanCanCan notes](cancancan.md).
 
+### Using `enum`
+
+Yo, check it [out](http://edgeapi.rubyonrails.org/classes/ActiveRecord/Enum.html). That's AWESOME. Very good explanation at the top of the docs on that one. You can easily see how `enum` might be useful for keeping track of users' roles (as guest, normal user, administrator, etc.). For example, you might do this:
+
+```ruby
+class User < ActiveRecord::Base
+  enum role: [:normal, :moderator, :admin]
+end
+```
+
+..and then you can do this:
+
+```ruby
+user.admin?
+```
+
+...which, because of `enum`, it interprets as:
+
+```ruby
+user.role == 2
+```
+
+So cool. The role `enum` is stored as an integer in the database (do I have to add it as a column?).
+
+#### Checking if a user is a guest
+
+You might have a `User` object which has not been persisted to the database (maybe not logged in, maybe filled out `/sign_up` but not yet saved/validated). That user is a "guest". You can check this with `#persisted?` like so:
+
+```ruby
+class User < ActiveRecord::Base
+  enum role: [:normal, :moderator, :admin]
+  
+  def guest?
+    persisted?
+  end
+end
+```
+
+Just a note: `user.role` will never return `'guest'` like this, since it's not a "real" role.
+
+#### Using the methods in a common pattern
+
+You can use these methods like this:
+
+```ruby
+class PostsController < ApplicationController
+  def update
+    @post = Post.find(params[:id])
+    return head(:forbidden) unless current_user.admin? ||
+                       current_user.moderator? ||
+                   current_user.try(:id) == @post.id
+    @post.update(post_params)
+  end
+  # more down here
+end
+```
+
+Sweet. If you're using CanCanCan (see the [CanCanCan notes](cancancan.md)) you can use these roles to determine what abilities a user has:
+
+```ruby
+class Ability
+  include CanCan::ability
+ 
+  def initialize(user)
+    user.can :read, Post
+    return if user.guest?
+ 
+    user.can :update, Post, {owner_id: user.id}
+    return if user.normal?
+ 
+    user.can :update, Post
+    return if user.moderator?
+ 
+    user.can :manage, Post if user.admin?
+  end
+end
+```
+
+Very cool. I don't _love_ that cascading pattern, but oh well.
+
 ## Views
 
 ### Files and structure
