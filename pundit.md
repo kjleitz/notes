@@ -126,6 +126,43 @@ That `Scope` class initializes with a user and an `ActiveRecord::Relation`, a.k.
 <% end %>
 ```
 
+## Setting permissions for updating attributes
+
+You can control what attributes of a model a user can update, too, which is super cool. Define a `permitted_attributes` method like so:
+
+```ruby
+class PostPolicy < ApplicationPolicy
+  def permitted_attributes
+    if user.admin? || user.owner_of?(post)
+      [:title, :body, :tag_list]
+    else
+      [:tag_list]
+    end
+  end
+end
+```
+
+Now, a user can update the tags of any post, and edit the title and body of their own post (or any post if they're an admin).
+
+This supplies you with a helper method of the same name (confusing), which takes a model object as an argument and returns which attributes are writable:
+
+```ruby
+class PostsController
+  def update
+    @post = Post.find(params[:id])
+    if @post.update_attributes(permitted_attributes(@post))
+      redirect_to @post
+    else
+      render :edit
+    end
+  end
+end
+```
+
+I'm actually not quite sure about this... `update_attributes` is just an alias for `update`, which should take a _hash_ to, you know, update the attribute values? But if I'm not mistaken, `permitted_attributes` returns a list of attributes.
+
+**EDIT: Ah, here we go. Check out the Pundit docs [here](https://github.com/elabs/pundit#strong-parameters).** It sorta takes the place of the normal `post_params` method you would have defined. You can also define `permitted_attributes_for_<action>` methods in your `<model>Policy`, which will give you distinct permissions for different actions! :D I love this gem!
+
 ## Unit testing
 
 You can test policies pretty easily with Pundit:
