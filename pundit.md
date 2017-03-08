@@ -2,6 +2,8 @@
 
 Pundit allows you to organize your authorization code so you don't end up with an overly complex CanCanCan `Ability` class, or controllers overloaded with authorization checks.
 
+The gem is super simple. Check out the docs, they're awesome: https://github.com/elabs/pundit
+
 ## Basic setup
 
 Add this line to your gemfile:
