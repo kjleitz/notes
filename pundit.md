@@ -97,6 +97,35 @@ For example, you can use it in your views like so:
 
 Nice.
 
+## Scopes
+
+Say we want to show a user what posts they have access to... for example, there are drafts, and there are published posts. Only owners of drafts and admin are allowed to see unpublished (draft) posts. 
+
+We can achieve this with scopes! Define a class named `Scope`, which inherits from `Scope` (weird, I know), inside of your model's `Policy` class:
+
+```ruby
+class PostPolicy < ApplicationPolicy
+  class Scope < Scope
+    def resolve
+      if user.admin?
+        scope.all
+      else
+        scope.where(:published => true)
+      end
+    end
+  end
+  # ...
+end
+```
+
+That `Scope` class initializes with a user and an `ActiveRecord::Relation`, a.k.a. what you would get from a `where` query. So, for example, you can use it in your view so a user can see all the posts that they are allowed to see, using the helper method `policy_scope`:
+
+```html
+<% policy_scope(@user.posts).each do |post| %>
+  <p><%= link_to post.title, post_path(post) %></p>
+<% end %>
+```
+
 ## Unit testing
 
 You can test policies pretty easily with Pundit:
