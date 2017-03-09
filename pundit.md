@@ -165,6 +165,28 @@ I'm actually not quite sure about this... `update_attributes` is just an alias f
 
 **EDIT: Ah, here we go. Check out the Pundit docs [here](https://github.com/elabs/pundit#strong-parameters).** It sorta takes the place of the normal `post_params` method you would have defined. You can also define `permitted_attributes_for_<action>` methods in your `<model>Policy`, which will give you distinct permissions for different actions! :D I love this gem!
 
+## Rescuing from the error
+
+This is a good pattern for rescuing from errors caused by problematic authorizations:
+
+```ruby
+class ApplicationController < ActionController::Base
+  protect_from_forgery
+  include Pundit
+
+  rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
+
+  private
+
+  def user_not_authorized
+    flash[:alert] = "You are not authorized to perform this action."
+    redirect_to(request.referrer || root_path)
+  end
+end
+```
+
+Then, you can customize `user_not_authorized` per controller. Solid pattern, bruh.
+
 ## Unit testing
 
 You can test policies pretty easily with Pundit:
