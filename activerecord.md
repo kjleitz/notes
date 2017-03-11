@@ -700,6 +700,12 @@ end
 
 You can see how these might be useful.
 
+## Scopes
+
+Yoooooooo take a look at [this shit](http://api.rubyonrails.org/classes/ActiveRecord/Scoping/Default/ClassMethods.html).
+
+That's _useful_, broseph.
+
 ## Migrations
 
 Set up migrations so that you can easily and simply apply new database changes and revert them if you need to. Migrations are like version control for your database. Executed migrations are tracked by ActiveRecord so they aren't used twice and you don't have to keep track of changes manually.
