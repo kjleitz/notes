@@ -24,7 +24,7 @@ Partly: Builds a schedule for a user to be comfortable and flexible for them, es
 - Task requests
     - backside: see request, accept it
     - save requests
-- Notification system (when task is accepted, when task is done)
+- Notification system (when task is accepted, when task is done, that you have a reminder waiting, etc.)
 - Reminder system (separate from notifications): reminders are manual from the assistant (either requested from the client/scheduled or noticed by the assistant)
 - Reward system (for the user): maybe sign-ins, tasks completed
 - General task list (for the user) that assistant can pick things off of like a wishlist
@@ -84,21 +84,39 @@ Partly: Builds a schedule for a user to be comfortable and flexible for them, es
 
 #### Task
 
+May add tags to tasks... partly because it's good to be able to categorize tasks into types (requires phone call, requires travel, etc.) and partly because my project needs to have a nested form which writes to a model through a custom attribute writer and I can't picture another part of this app that would require that logic.
+
 - content
 - timestamp
 - date due
 - client_id
 - status
-    - pending
+    - idle
+    - requested
     - accepted
     - in progress
     - completed
+
+#### Label
+
+A label is used to denote a type of work required by a task (requires phone call, requires travel, requires foreign language, requires internet access, etc.) and can be created by Assistants, and applied by both Clients and Assistants.
+
+- name
+
+#### LabelsTasks
+
+- label_id
+- task_id
 
 #### Notification
 
 - content
 - timestamp
 - task_id
+- status
+    - unseen
+    - seen
+    - dismissed
 
 #### Reminder
 
@@ -110,17 +128,38 @@ Partly: Builds a schedule for a user to be comfortable and flexible for them, es
     - seen
     - completed
 
-#### Message
+#### <s>Message
 
 - subject
 - content
 - timestamp
 - priority
+    - low
+    - medium
+    - high
 - sender_id
 - receiver_id
-- task_id (optional - message can be related to a task)
+- thread_id
+- task_id (optional - message can be related to a task)</s>
+
+#### Comment
+
+Going to use a comment thread on a task to discuss information. That way, communication is focused, as opposed to a general message/email system and the Assistant having to deal with organizing info from unattached sources. With comments, all communication is centralized on a topic, and all information necessary to complete a task can be accessed from one area.
+
+- content
+- task_id
+- author_id
+- timestamp
+- pinned?
+- edited?
 
 #### Preference
 
 - client_id
+- phone # & personal info
 - _(we'll do these later)_
+
+### Strategy
+
+1. I've done the models first
+2. 
