@@ -162,4 +162,5 @@ Going to use a comment thread on a task to discuss information. That way, commun
 ### Strategy
 
 1. I've done the models first
-2. 
+2. Build controllers and specific views for each of the functions, with the intent to build dashboards for client and assistant _after_
+3. 
