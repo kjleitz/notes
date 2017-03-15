@@ -256,6 +256,17 @@ end
 
 Woo! Magic.
 
+##### Optional foreign key
+
+As of Rails 5, `belongs_to` implies that the foreign key is required (a.k.a. not `nil`/`NULL`). If you want it to be optional, you can specify this with the `optional: true` option in your model:
+
+```ruby
+class Song < ActiveRecord::Base
+  belongs_to :artist
+  belongs_to :genre, optional: true
+end
+```
+
 #### "Has many"
 
 An artist has many songs (another model class):
