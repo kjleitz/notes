@@ -355,7 +355,7 @@ class Admin::StatsController < ApplicationController
 end
 ```
 
-When you have the controller in the module like this, Rails also expected views for the controller to be in a similarly-structured directory. Make a new `admin` directory (again) in `app/views/admin`, then make a `app/views/admin/stats` directory to place your view files (basically, for example, moving `app/views/stats/index.html.erb` to `app/views/admin/stats/index.html.erb`).
+When you have the controller in the module like this, Rails also expects views for the controller to be in a similarly-structured directory. Make a new `admin` directory (again) in `app/views/admin`, then make a `app/views/admin/stats` directory to place your view files (basically, for example, moving `app/views/stats/index.html.erb` to `app/views/admin/stats/index.html.erb`).
 
 So, now that we have the structure all worked out, we can have a scoped route that references our new `admin` module:
 
