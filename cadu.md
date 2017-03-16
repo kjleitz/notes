@@ -157,10 +157,10 @@ Going to use a comment thread on a task to discuss information. That way, commun
 
 - client_id
 - phone # & personal info
-- _(we'll do these later)_
+- _(I'll do these later)_
 
 ### Strategy
 
 1. I've done the models first
 2. Build controllers and specific views for each of the functions, with the intent to build dashboards for client and assistant _after_
-3. 
+3. Policies, probably, _after_ (?) the controllers but before the dashboard?
