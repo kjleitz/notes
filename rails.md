@@ -1067,6 +1067,8 @@ end
 
 You can use "partials" to keep your templates DRY.
 
+#### The basics
+
 Say you have this view:
 
 ```html
@@ -1145,7 +1147,7 @@ Keep in mind:
 - The partial can be named anything, as long as it starts with an underscore. When the partial is referenced, it's gotta be _without_ an underscore.
 - The partial is assumed to reside in the same folder as the view, but you can specify a different folder like `render "posts/form"` if you want (no need to do `render "../posts/form"` apparently, because it will check from the base `views` folder if you specify a folder in the string, I guess)
 
-### Locals for partials
+#### Locals for partials
 
 If we specify a different folder for a partial, such as with `render "authors/author"` in a `post` view, we might have to pass in an instance variable `@author` that `authors/_author.html.erb` depends on, and then maybe when we decide later that we don't want that partial to be rendered in the `post` view, we have a dangling `@author` variable in the controller that we have to clean up. That's a small example of a headache caused by dependencies for a partial.
 
@@ -1189,7 +1191,7 @@ Information About the Post
 
 Nice.
 
-### Collections of partials
+#### Collections of partials
 
 Say you want to render a partial for each element of a collection. You'd probably do something like this:
 
