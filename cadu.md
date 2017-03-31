@@ -86,6 +86,12 @@ Partly: Builds a schedule for a user to be comfortable and flexible for them, es
 
 May add tags to tasks... partly because it's good to be able to categorize tasks into types (requires phone call, requires travel, etc.) and partly because my project needs to have a nested form which writes to a model through a custom attribute writer and I can't picture another part of this app that would require that logic.
 
+Have common tasks built in so you can provide info (e.g. doctor's appointment gives you boxes for reason, date, office, etc.).
+
+drop down calendar
+
+warning for requesting a task same day
+
 - content
 - timestamp
 - date due
@@ -159,8 +165,20 @@ Going to use a comment thread on a task to discuss information. That way, commun
 - phone # & personal info
 - _(I'll do these later)_
 
-### Strategy
+### To do
 
 1. I've done the models first
 2. Build controllers and specific views for each of the functions, with the intent to build dashboards for client and assistant _after_
 3. Policies, probably, _after_ (?) the controllers but before the dashboard?
+4. 'Mark complete' button on tasks (even for clients)
+5. 'Remind about this' button on tasks (even for clients) - ability to create reminders for yourself as a client, too.
+6. "Repeat reminder" for assistant instead of "Dismiss"
+7. add labels to things
+8. add new labels
+9. 'action' actions to update
+10. minutes dropdown gets pushed to next line on smaller screens
+11. actually use policy scopes for scoping model collections
+12. new labels should apply using find_by so it doesn't error
+13. tasks should not have duplicate labels
+14. links to see label index, add new labels (for assistant)
+15. display errors for forms
