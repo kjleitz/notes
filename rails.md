@@ -21,7 +21,11 @@ Start a new rails project:
 user@lappy:~$ rails new project-name
 ```
 
-Project name should be lowercase and separated by dashes.
+Project name should be lowercase and separated by dashes. You can also skip initializing a testing framework by passing the `-T` flag:
+
+```
+user@lappy:~$ rails new project-name -T
+```
 
 ### Running a local server
 
