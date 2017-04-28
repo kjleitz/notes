@@ -167,18 +167,22 @@ Going to use a comment thread on a task to discuss information. That way, commun
 
 ### To do
 
-1. I've done the models first
-2. Build controllers and specific views for each of the functions, with the intent to build dashboards for client and assistant _after_
-3. Policies, probably, _after_ (?) the controllers but before the dashboard?
-4. 'Mark complete' button on tasks (even for clients)
-5. 'Remind about this' button on tasks (even for clients) - ability to create reminders for yourself as a client, too.
-6. "Repeat reminder" for assistant instead of "Dismiss"
-7. add labels to things
-8. add new labels
-9. 'action' actions to update
-10. minutes dropdown gets pushed to next line on smaller screens
-11. actually use policy scopes for scoping model collections
-12. new labels should apply using find_by so it doesn't error
-13. tasks should not have duplicate labels
-14. links to see label index, add new labels (for assistant)
-15. display errors for forms
+1. <s>I've done the models first</s>
+2. <s>Build controllers and specific views for each of the functions, with the intent to build dashboards for client and assistant _after_</s>
+3. <s>Policies, probably, _after_ (?) the controllers but before the dashboard?</s>
+4. <s>'Mark complete' button on tasks (even for clients)</s>
+5. <s>'Remind about this' button on tasks (even for clients) - ability to create reminders for yourself as a client, too.</s>
+6. <s>"Repeat reminder" for assistant instead of "Dismiss"</s>
+7. "Mark seen" button on reminders for clients
+7. add labels to things with button/dropdown
+8. <s>add new labels</s>
+9. 'action' actions moved to smart #update
+10. <s>minutes dropdown gets pushed to next line on smaller screens</s>
+11. <s>actually use policy scopes for scoping model collections</s>
+12. <s>new labels should apply using find_by so it doesn't error</s>
+13. **tasks should not have duplicate labels**
+14. <s>links to see label index, add new labels (for assistant)</s>
+15. **display errors for forms**
+16. color overdue tasks or otherwise emphasize them (notification)
+16. **allow oauth from some other service like google or facebook**
+17. radio buttons on user edit pages for role change (only if you're an administrator)
