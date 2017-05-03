@@ -43,6 +43,72 @@ Object.keys(null)
 //    at <anonymous>:1:7
 ```
 
+## Functions
+
+blah blah blah arrow functions anonymous functions you know all that.
+
+### Using `bind()`
+
+You can use `bind()` to return a new function with a supplied `this` context and pre-set arguments. It's actually pretty useful. For example (contrived but whatever):
+
+```js
+function multiply(value1, value2) {
+  return value1 * value2;
+}
+
+var double = multiplier.bind(null, 2);
+var triple = multiplier.bind(null, 3);
+```
+
+See more [here](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_objects/Function/bind), but you should look up some videos and get yourself used to this, because this kind of metaprogramming always comes in super handy in Ruby.
+
+### Using `call()` and `apply()`
+
+Pretty sure `call()` is roughly the same as `bind()`, but it actually calls the function. Useful if you're calling a function as a callback within another function, since the callback has closure over the function and might therefore have a different context for `this` than intended (could be global scope if it's a global function it's being called in, could be the object the function is a method of, etc.). 
+
+You can use `apply()` to do the same thing... the only difference being that `call()` takes a value to be defined as `this`, then all subsequent arguments are applied as arguments to the function, whereas `apply()` takes a `this` value, then an _array_ of values to be supplied as arguments to the function.
+
+See the following excerpt from [that badgood website](http://javascriptissexy.com/understand-javascript-callback-functions-and-use-them/):
+
+>When the callback function is a method that uses the this object, we have to modify how we execute the callback function to preserve the this object context. Or else the this object will either point to the global window object (in the browser), if callback was passed to a global function. Or it will point to the object of the containing method.
+>Let’s explore this in code:
+>
+>```js
+// Define an object with some properties and a method​
+​// We will later pass the method as a callback function to another function​
+​var clientData = {
+    id: 094545,
+    fullName: "Not Set",
+    // setUserName is a method on the clientData object​
+    setUserName: function (firstName, lastName)  {
+        // this refers to the fullName property in this object​
+      this.fullName = firstName + " " + lastName;
+    }
+}
+​
+​function getUserInput(firstName, lastName, callback)  {
+    // Do other stuff to validate firstName/lastName here​
+​
+    // Now save the names​
+    callback (firstName, lastName);
+}
+```
+
+>In the following code example, when clientData.setUserName is executed, this.fullName will not set the fullName property on the clientData object. Instead, it will set fullName on the window object, since getUserInput is a global function. This happens because the this object in the global function points to the window object.
+
+>```js
+getUserInput ("Barack", "Obama", clientData.setUserName);
+​
+console.log (clientData.fullName);// Not Set​
+​
+​// The fullName property was initialized on the window object​
+console.log (window.fullName); // Barack Obama
+```
+
+Good example. Bad author. Bad author! Why is that site so badgood?
+
+If I'm not mistaken, you can use arrow functions (which bind `this` to the scope so that it applies to the context where it was defined—bad explanation, look it up) to make this less of a problem (but sometimes you want this behavior, obviously). I'll have to write a section on closures, too, I guess.
+
 ## Console
 
 Log some stuff:
@@ -865,3 +931,9 @@ stuff
 #### Key presses
 
 Ugh, okay so just... do `e.detail || e.which` if you're looking to check a keypress value. I guess. Goddamnit.
+
+## Useful Libraries
+
+### Lodash
+
+[Lodash](https://lodash.com/) is a nice library for creating javascript templates (using functions to build up the DOM). It's also a really nice library for other stuff, too, so check that shit _out_. Cool functions for iterating over arrays/objects/strings, too. See more in the [lodash notes](lodash.md).
