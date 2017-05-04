@@ -109,6 +109,16 @@ Good example. Bad author. Bad author! Why is that site so badgood?
 
 If I'm not mistaken, you can use arrow functions (which bind `this` to the scope so that it applies to the context where it was defined—bad explanation, look it up) to make this less of a problem (but sometimes you want this behavior, obviously). I'll have to write a section on closures, too, I guess.
 
+### This (`this`)
+
+`this` is the execution context (whatever called the function, basically). Basically, the scope where the function was called. It could be an object, an event, another function, etc. A reference to `this` in a function called in the global scope returns the `window` object.
+
+About strict mode, from Learn.co:
+
+>In strict mode, `this` remains at whatever it's set to when entering the execution context. If it's not defined, it remains `undefined` rather than being assigned the default `window` object.
+
+We can also use `this` within an event handler to refer to the element that triggered the event.
+
 ## Console
 
 Log some stuff:
@@ -932,8 +942,50 @@ stuff
 
 Ugh, okay so just... do `e.detail || e.which` if you're looking to check a keypress value. I guess. Goddamnit.
 
+## Object Oriented JavaScript
+
+### Constructor functions
+
+You can use this (old) pattern:
+
+```js
+function Sandwich(bread, crust, meat, condiments, veggies, cheese) {
+  this.breadType = bread;
+  this.crust = crust;
+  this.meat = meat;
+  this.condiments = condiments;
+  this.veggies = veggies;
+  this.cheese = cheese;
+}
+
+var blt = new Sandwich("white", false, "bacon", "mayo", ["lettuce", "tomato"], "none");
+```
+
+Notice the capital first letter. Use `new` so you don't just return `undefined` (since there's no return value).
+
+You can also get the constructor function as a property from the created object:
+
+```js
+blt.constructor;
+// returns the Sandwich constructor function
+```
+
+### Properties
+
+Access properties with either `[<key>]` or `.<key>` syntax:
+
+```js
+// These are equivalent:
+blt["breadType"];
+blt.breadType;
+```
+
 ## Useful Libraries
 
 ### Lodash
 
 [Lodash](https://lodash.com/) is a nice library for creating javascript templates (using functions to build up the DOM). It's also a really nice library for other stuff, too, so check that shit _out_. Cool functions for iterating over arrays/objects/strings, too. See more in the [lodash notes](lodash.md).
+
+### Handlebars
+
+[Handlebars](http://handlebarsjs.com/) is also awesome. Restricts logic in the view to keep templates clean. See more in the [handlebars notes](handlebars.md).
