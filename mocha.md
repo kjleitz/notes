@@ -48,3 +48,54 @@ before(function(done) {
   });
 });
 ```
+
+## Example use
+
+Like-a dis:
+
+```js
+describe('favoriteIceCream', () => {
+  it('should return the correct sentence when passed an icecream flavor', () => {
+    const result = favoriteIceCream('mint chocolate chip');
+    const expectedResult = 'I love mint chocolate chip';
+    expect(result).toBe(expectedResult);
+  });
+});
+```
+
+Pretty self-explanatory.
+
+## Why it never worked in the browser for you
+
+Apparently you gotta have `mocha.setup('bdd')` in there, like this:
+
+```html
+<script src="mocha.js"></script>
+<script src="https://unpkg.com/expect/umd/expect.min.js"></script>
+<script>mocha.setup('bdd');</script>
+<script src="../index.js"></script>
+<script src="intro-test.js"></script>
+<script>
+  mocha.run();
+</script>
+```
+
+Then, throwing `debugger` in a function will be pretty useful, while testing in the browser. JS' answer to `pry`.
+
+## Spying with Sinon
+
+### General
+
+Here are some [best practices](https://semaphoreci.com/community/tutorials/best-practices-for-spies-stubs-and-mocks-in-sinon-js).
+
+### Spies
+
+You can use Sinon.js for spying. See [this lesson](https://github.com/learn-co-students/javascript-spies-v-000) for more info.
+
+### Stubs
+
+You can use it to stub out methods (overwrite them so you can see when they're called with certain stuff), which is great for testig async stuff like an AJAX request (see [here](https://github.com/learn-co-students/javascript-mocks-and-stubs-v-000)).
+
+### Mocks
+
+Not exactly sure, too lazy to put effort into understanding right now. See [here](https://github.com/learn-co-students/javascript-mocks-and-stubs-v-000).
