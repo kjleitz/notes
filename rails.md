@@ -2262,3 +2262,79 @@ Instead, you can use a shorter syntax:
 ```
 
 This is a nice way to delete items through RESTful conventions without resorting to javascript!
+
+## The asset pipeline
+
+### The basics
+
+Apparently [this keynote](https://www.youtube.com/watch?v=cGdCI2HhfAU) where DHH (creator of Rails) introduces the Asset Pipeline is a good watch. I'll watch it later.
+
+### Asset paths
+
+Paths to asset folders are configured like this:
+
+```ruby
+Rails.application.config.assets.paths => [
+  "/Users/avi/asset-test/app/assets/images",
+  "/Users/avi/asset-test/app/assets/javascripts",
+  "/Users/avi/asset-test/app/assets/stylesheets",
+  "/Users/avi/asset-test/vendor/assets/javascripts",
+  "/Users/avi/asset-test/vendor/assets/stylesheets",
+  "/Users/avi/.rvm/gems/ruby-2.2.3/gems/turbolinks-2.5.3/lib/assets/javascripts",
+  "/Users/avi/.rvm/gems/ruby-2.2.3/gems/jquery-rails-4.1.0/vendor/assets/javascripts",
+  "/Users/avi/.rvm/gems/ruby-2.2.3/gems/coffee-rails-4.1.1/lib/assets/javascripts"
+]
+```
+
+If you want to add folders to the asset pipeline, add them like this in `config/initializers/assets.rb`:
+
+```ruby
+Rails.application.config.assets.paths << "New Path"
+```
+
+This way, we can put assets anywhere and access them via a single `/assets` URL, kinda like the `$PATH` system variable.
+
+### Manifest files
+
+Just having stuff in your path doesn't mean it will be _used_ in your application. If you want that (say, a js calendar file you added a path to), you gotta add the asset to the manifest file:
+
+```js
+// app/assets/javascripts/application.js
+
+//= require jquery
+//= require calendar
+```
+
+From [this Learn lesson](https://github.com/learn-co-students/what-is-the-asset-pipeline-v-000):
+
+> When you include the manifest file in your layout with the javascript_include_tag, the asset pipeline will look for all of the files listed in the Asset Path. Notice how we require calendar. This file lives in app/assets/javascripts/calendar.js, yet we only specified the name and not the full path. The Asset Pipeline will search all the configured paths for a file with the name we provided.
+
+Rails concatenates all these files together when they need to be served.
+
+#### Directives
+
+In the javascript manifest file, you can see `//=` statements. Those are called "directives". They're not normal JS comments; they tell sprockets to do something.
+
+Notes on the `require` directive from [this Learn lesson]():
+
+> You may notice another directive in your manifest file. The `require_tree` directive tells sprockets to load all files in the given folder. By default, the manifest file has `//= require_tree` . which will include all JS files in the same folder that `application.js` is located. This makes adding new JS files into our application really easy but can cause problems. As your application grows, you may not want all of the JS loaded everywhere. For example, say you have two pages that have a similiar button. You want those two buttons to behave differently even though they look the same. If all JS is loaded all the time, then the browser will not know which JS should be applied to each button. In the end, it's generally better to control which JS is being loaded for each page. Additionally, the files will be loaded in alphabetical order. Often, external libraries will have a dependency on another JS file being loaded before it, and all your JavaScript will error out if this load order is not honored. Given that things load in alphabetical order, it's unlikely things will magically be loaded in the right order. Check the console in your browser to see if you are getting these types of errors, and, if so, manually `require` each file in the order you need it to be loaded and get rid of `require_tree`.
+> 
+> One last thing to remember: when you `require` something in your manifest file, the path you provide must be the asset path. If you have the file `comments.js` in the folder `/assets/javascripts/blog`, you would need to use `//= require blog/comments` to include it in our manifest file. 
+
+### Preprocessors
+
+Rails lets you use SCSS and CoffeeScript and preprocesses assets before they are served. Just name `main.css.scss`, for example, and Rails will turn that into `main.css` for ya.
+
+### Fingerprinting
+
+For cache invalidation. You know what this is. I won't waste my time writing it down.
+
+### Finally, including in the view
+
+Do this:
+
+```html
+<%= javascript_include_tag "application" %>
+```
+
+...and sprockets will compile the manifest. In development mode, it will insert/load each file separately. In production mode, it will compile them all into one big file.
