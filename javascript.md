@@ -942,6 +942,40 @@ stuff
 
 Ugh, okay so just... do `e.detail || e.which` if you're looking to check a keypress value. I guess. Goddamnit.
 
+## Async requests
+
+### AJAX
+
+See the [Ajax notes](ajax.md) for stuff about Ajax.
+
+### Fetch
+
+There's a new API for async requests that uses promises and a buncha cool stuff: `fetch()`
+
+With fetch, you can do this kind of thing:
+
+```js
+fetch('https://api.github.com/repos/jquery/jquery/commits')
+  .then(res => res.json())
+  .then(json => console.log(json));
+```
+
+You can also pass an options object to fetch after the URL (including things like `method: "POST"`, `body: ...`, `headers: {...}`, etc.).
+
+The `then()` method is a neat feature of...
+
+### Promises
+
+...which represent a value that might not be available yet, but will be at some point in the future.
+
+You can chain `then()` calls on it, and the callback you give to `then` gets the result of the previous one as an argument. Confusing? Maybe. Powerful? Apparently!
+
+A `Promise` object, returned by a function like `fetch()`, represents the result of an operation, whenever it occurs. A promise object has a `then()` method which is called when the promise is fulfilled (completed successfully). The `then()` call returns... another promise?... which can be passed to the next `then()`'s callback function as an argument (and so on, and so on, etc.).
+
+### Authorization with `fetch()`
+
+Ugh, just read [this](https://learn.co/tracks/full-stack-web-dev-with-react/advanced-javascript/accessing-remote-apis-with-javascript/javascript-fetch-lab) and the previous one, if you need to do this.
+
 ## Object Oriented JavaScript
 
 ### Constructor functions
@@ -980,6 +1014,315 @@ blt["breadType"];
 blt.breadType;
 ```
 
+### Inheritance with prototypes
+
+#### Non-inheritance method
+
+Say you want to make a `Rectangle` constructor and a `Square` constructor, and you know that a square is basically just a rectangle, so why duplicate code? You might do something like this:
+
+```js
+// Rectangle constructor
+function Rectangle(width, height) {
+  this.width = width;
+  this.height = height;
+  this.area = function() {
+    return this.width * this.height;
+  }
+  this.perimeter = function() {
+    return (this.width + this.height) * 2;
+  }
+}
+ 
+// Square constructor
+function Square(length) {
+  Rectangle.call(this, length, length);
+}
+
+var rect = new Rectangle(3, 5);
+var square = new Square(2);
+
+rect.area();    //=> 15
+square.area();  //=> 4
+```
+
+Here, you're directly `call`ing the `Rectangle` constructor function within the `Square` constructor, with the `this` context of `Square`. So, the `Rectangle()` call will set the properties/methods to `Square`'s context! Great! Unfortunately, it only copies what `Rectangle` has at the time of instantiation. It doesn't really _inherit_ from `Rectangle`. Future changes to the `Rectangle` prototype won't carry down to `square`.
+
+#### Actual inheritance with prototypes
+
+WATCH THIS: https://www.youtube.com/watch?v=Yvf_kUBZmXg this video explains every dumb confusing thing about prototypal inheritance in JavaScript. SUPER worth it.
+
+Prototypes are neat. Every object has a prototype, and that prototype is essentially a reference to the "parent" object that that object inherits from (which itself has a prototype, and on and on). When you call a method on an object, if it's not found on the object itself, it will be asked of the object's prototype. If it's not there, it continues up the chain until it's found. It's delegated up the chain.
+
+That's a cool concept. It means you can add methods and properties and changes to the prototypal object on the fly, and then even already-instantiated objects will get those changes! You also get the benefit of efficiency; all those methods and properties aren't _copied_ over to the object, they're delegated to the prototype when needed (and they can be changed at runtime!).
+
+We can do this:
+
+```js
+function Shape(sides, x, y) {
+  this.sides = sides;
+  this.x = x;
+  this.y = y;
+}
+
+function Rectangle(x, y, width, height) {
+  //call superclass constructor
+  Shape.call(this, 4, x, y);
+  //set rectangle values
+  this.width = width;
+  this.height = height;
+}
+
+// set Rectangle prototype to an instance of a Shape
+Rectangle.prototype = Object.create(Shape.prototype);
+// set Rectangle constructor
+Rectangle.prototype.constructor = Rectangle
+ 
+// extend with Rectangle behavior
+Rectangle.prototype.area = function() {
+  return this.width * this.height;
+}
+Rectangle.prototype.perimeter = function () {
+  return (this.width + this.height) * 2;
+}
+```
+
+...and get this:
+
+```js
+var rect = new Rectangle(1,0,5,3)
+var shape = new Shape(3,2,2)
+ 
+console.log(rect.sides);
+// 4
+console.log(shape.sides);
+// 3
+ 
+console.log(rect.width);
+// 5
+console.log(shape.width);
+// undefined
+ 
+console.log(rect.area());
+// 15
+console.log(shape.area());
+// TypeError - no function
+ 
+console.log(rect instanceof Shape);
+//true
+console.log(shape instanceof Rectangle);
+//false
+```
+
+...
+
+
+Is it that the object has a prototype object (which has properties) which has a prototype object (which has properties), and so on?
+
+Or,
+
+Is it that the object has a prototype object (which has properties), which has a constructor function which has a prototype... wait
+
+The object has a `__proto__` property, which is an object with whatever has been added onto the parent's prototype (`Rectangle.prototype.foo = "bar";`, etc.) and a `constructor` method (property?) that is the parent constructor function (`Rectangle`). Now, `Rectangle` has a `__proto__` property, too! But it's of the basic `function`. `Rectangle` _also_ has a `prototype` property, which is the same as the object referenced by the initial object's `__proto__`. I would go on, but it's turtles all the way down after this.
+
+So, a constructor has a prototype. A prototype is an object that `new` creates an object _with_, and within the constructor, `this` refers to that object. (I think this is technically wrong)
+
+An object is created by `new`, and the constructor initializes stuff on it. That object is also given a `__proto__` property, which references the object held by the `prototype` property of the constructor.
+
+The prototype object referenced by the new object's `__proto__` property carries basically three references:
+
+1. `constructor`, a method, which references the constructor function
+2. `__proto__`, a property, which references the prototype object that _it_ was created with (in the same way this object was constructed)
+3. anything you add to the constructor function's `prototype` through `Rectangle.prototype.size = "large"`, etc.
+
+SO!
+
+1. Constructor function `Rectangle` is defined
+2. Constructor function has a `Rectangle.prototype` object
+    3. the prototype object has a method called `constructor` which references the constructor function (`Rectangle`)
+    4. the prototype object has a property called `__proto__` which references, by default, `Object`
+2. You create a new object from that constructor with `var rect = new Rectangle(2, 5)`
+    3. This creates a new object called `rect` with properties initialized from the `Rectangle` function call
+    4. `rect.__proto__` is assigned to reference `Rectangle`'s prototype object
+3. If you change `Rectangle`'s prototype object (e.g. to an object created by `Object.create(Shape.prototype)`), it changes `rect`'s `__proto__` reference to that object
+
+And the basic instruction set for inheritance:
+
+- Define the initial constructor:
+
+```js
+function Rectangle(x, y) {
+  this.width = width;
+  this.length = length;
+  this.area = function() {
+    return x * y;
+  };
+}
+```
+
+- Define the constructor of what you want to inherit from `Rectangle`, and call the `Rectangle` constructor with its context:
+
+```js
+function Square(length) {
+  Rectangle.call(this, length, length);
+}
+```
+
+- Set the child constructor's prototype to the parent's prototype object:
+
+```js
+Square.prototype = Object.create(Rectangle.prototype);
+```
+
+- That overrides the fact that `Square`'s prototype's _constructor_ should _still_ be `Square` (not `Rectangle`), so make sure you set that:
+
+```js
+Square.prototype.constructor = Square;
+```
+
+- Now you're all done! Square's prototype still generates `Square`s, and the prototype of _that_ prototype is `Rectangle`, (and on and on until `Object`), so rectangles inherit from all the way up.
+- Side note: you can put those last two lines in a generic `inherit(child, parent)` function, or whatever
+
+Okay, one more time, just some more explanation as far as I understand it:
+
+When you do:
+
+```js
+var rect = new Rectangle(3, 4);
+```
+
+It does this (?):
+
+```js
+var rect = {};
+// rect: {}
+
+Rectangle.call(rect);
+// rect: {
+//   width:  3,
+//   height: 4
+// }
+
+rect.__proto__ = Rectangle.prototype;
+// rect: {
+//   width:  3,
+//   height: 4,
+//   __proto__: {
+//     constructor: function Rectangle() {...}
+//     __proto__: {
+//       constructor: function Shape() {...}
+//       __proto__: {
+//         ...
+//       }
+//     }
+//   }
+// }
+```
+
+OHHHHHHHHH! So, with `Object.create(Rectangle.prototype)`, you create essentially what you create with `new Rectangle(3, 4)` only you don't run the actual constructor function (picture `rect` in that comment, but without the properties of its own). That's basically just an object with `__proto__`s referring to previous shit, but without its own properties other than `__proto__`, _including_ the `constructor` method! So, you assign, for example, `Square.prototype` to that object, which becomes its prototype (a.k.a. what instantiated `Square`s will have as their `__proto__` property), but since there's no constructor on that prototype, you assign it one (the constructor function itself)!!! You aren't _reassigning_ a constructor method when you do that, it only _had_ a constructor method because it was DELEGATING it to its prototype!!! You're _assigning_ it its OWN constructor method, which means that the parent prototype object still has its own constructor!!!
+
+#### Puttin' stuff on prototypes
+
+Sometimes it's good to throw methods on the prototype instead of within the constructor function itself. That way, instead of all these objects carrying around all these identical functions (imagine Facebook having 1.19 billion user objects o_o), they could all just reference the same method on their prototype. YAY!
+
+### Using `class` "instead of" prototypes
+
+#### Defining a class
+
+In ES6, we get the `class` keyword. Be aware: these are not real classes, they're just syntactic sugar for the prototypal inheritance pattern we just went over. Check it out:
+
+```js
+class User {
+  constructor(name, email) {
+    this.name = name;
+    this.email = email;
+  }
+ 
+  sayHello() {
+    console.log("Hello, my name is "+ this.name);
+  }
+}
+ 
+var sarah = new User("Sarah", "sarah@aol.com");
+sarah.sayHello();
+```
+
+Neat. Use `constructor()` within the class to define the constructor (the same way you'd define the constructor function, previously; sorta like `init` or `initialize`). You can even see that `sayHello()` is actually on the _prototype_, not on the object itself. That's handy!
+
+Notice also that the method definitions **don't** use the `function` keyword.
+
+#### Inheriting with classes (`extends`)
+
+No need to assign the prototype with `Object.create`. If you're making a `class`, you can do this:
+
+```js
+class Teacher extends User {
+    sayHello() {
+      super.sayHello()
+      console.log("I am a teacher");
+    }
+}
+ 
+var t = new Teacher("Tom", "tom@geocities.edu")
+t.sayHello()
+```
+
+Noice. Notice that you can now use `super` to access the superclass object.
+
+**Also, note: While function definitions are hoisted, class definitions are not.** If you need to use a class, you must define it before use.
+
+#### Methods using `this`
+
+Yo, reminder: value of `this` can be weird.
+
+```js
+class Animal { 
+  speak() {
+    return this;
+  }
+  static eat() {
+    return this;
+  }
+}
+
+let obj = new Animal();
+let speak = obj.speak;
+
+obj.speak();  //=> Animal {}
+speak();      //=> undefined
+
+let eat = Animal.eat;
+
+Animal.eat(); //=> class Animal {...}
+eat();        //=> undefined
+```
+
+Ugh.
+
+#### "Class methods" (`static` methods)
+
+Use `static` to designate what is basically a class method (can't be used on an instance of the class, only on the class itself):
+
+```js
+class Point {
+  constructor(x, y) {
+    this.x = x;
+    this.y = y;
+  }
+
+  static distance(a, b) {
+    const dx = a.x - b.x;
+    const dy = a.y - b.y;
+
+    return Math.sqrt(dx*dx + dy*dy);
+  }
+}
+
+const p1 = new Point(5, 5);
+const p2 = new Point(10, 10);
+
+console.log(Point.distance(p1, p2));
+```
+
 ## Useful Libraries
 
 ### Lodash
@@ -989,3 +1332,7 @@ blt.breadType;
 ### Handlebars
 
 [Handlebars](http://handlebarsjs.com/) is also awesome. Restricts logic in the view to keep templates clean. See more in the [handlebars notes](handlebars.md).
+
+### Mocha
+
+Test suite. Pretty cool. A little frustrating sometimes. If you're doing Learn.co labs and you want rspec-like documentation formatting output, do `npm test -- --reporter spec`. Good stuff: it's `npm test`, then a `--` to denote that you’re giving the `test` script extra arguments besides the ones it has pre-defined, then `--reporter spec` which are the arguments you supply to mocha to give an rspec-like documentation output! You could (arguably more simply?) do `./node_modules/.bin/mocha --reporter spec` but that’s kind of a pain to type out. You could also probably just install mocha globally with `npm install -g mocha` and then _probably_ do `mocha --reporter spec` which would be ideal, but I don’t want to potentially fuck with things by installing it globally.
