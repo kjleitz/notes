@@ -2294,6 +2294,47 @@ Rails.application.config.assets.paths << "New Path"
 
 This way, we can put assets anywhere and access them via a single `/assets` URL, kinda like the `$PATH` system variable.
 
+The asset path is used for JS, CSS, and images.
+
+#### Getting the path with the `#asset_path` helper
+
+Of course this exists:
+
+```ruby
+asset_path('logo.png')
+#=> "/assets/logo.png" (or wherever it is)
+
+# if it's in a subdirectory not in the assets path...
+asset_path('banner/logo.png')
+#=> "/assets/banner/logo.png"
+
+# if it can't find the file in the asset path:
+asset_path('logo.png')
+#=> "/logo.png"
+```
+
+Very useful for CSS:
+
+```
+.logo {
+  background-image: url(<%= asset_path('logo') %>);
+}
+```
+
+You don't have to use the helper with `#image_tag` (it uses it automatically):
+
+```html
+<%= image_tag "logo.png" %>
+```
+
+...results in:
+
+```html
+<img src="/assets/logo.png" />
+```
+
+...and if it can't be found? Again, it just puts it at `/logo.png`.
+
 ### Manifest files
 
 Just having stuff in your path doesn't mean it will be _used_ in your application. If you want that (say, a js calendar file you added a path to), you gotta add the asset to the manifest file:
@@ -2319,11 +2360,27 @@ Notes on the `require` directive from [this Learn lesson]():
 
 > You may notice another directive in your manifest file. The `require_tree` directive tells sprockets to load all files in the given folder. By default, the manifest file has `//= require_tree` . which will include all JS files in the same folder that `application.js` is located. This makes adding new JS files into our application really easy but can cause problems. As your application grows, you may not want all of the JS loaded everywhere. For example, say you have two pages that have a similiar button. You want those two buttons to behave differently even though they look the same. If all JS is loaded all the time, then the browser will not know which JS should be applied to each button. In the end, it's generally better to control which JS is being loaded for each page. Additionally, the files will be loaded in alphabetical order. Often, external libraries will have a dependency on another JS file being loaded before it, and all your JavaScript will error out if this load order is not honored. Given that things load in alphabetical order, it's unlikely things will magically be loaded in the right order. Check the console in your browser to see if you are getting these types of errors, and, if so, manually `require` each file in the order you need it to be loaded and get rid of `require_tree`.
 > 
-> One last thing to remember: when you `require` something in your manifest file, the path you provide must be the asset path. If you have the file `comments.js` in the folder `/assets/javascripts/blog`, you would need to use `//= require blog/comments` to include it in our manifest file. 
+> One last thing to remember: when you `require` something in your manifest file, the path you provide must be the asset path. If you have the file `comments.js` in the folder `/assets/javascripts/blog`, you would need to use `//= require blog/comments` to include it in our manifest file.
+
+CSS directives are similar, but they look like this:
+
+```css
+/*
+*= require application
+*= require main
+*/
+```
 
 ### Preprocessors
 
 Rails lets you use SCSS and CoffeeScript and preprocesses assets before they are served. Just name `main.css.scss`, for example, and Rails will turn that into `main.css` for ya.
+
+#### Precompiling for production
+
+From [this Learn lesson](https://github.com/learn-co-students/asset-preprocessors-in-rails-v-000):
+
+>In development mode, the asset pipeline will run the preprocessor on any file that needs to be processed every time it's requested. This is SLOW! In production, you might have had to run `rake assets:precompile`. This runs the preprocessors once, outputs all the now-static JS and CSS, and then allows the webserver to serve them without ever touching Rails. This is much quicker!
+
 
 ### Fingerprinting
 
@@ -2338,3 +2395,420 @@ Do this:
 ```
 
 ...and sprockets will compile the manifest. In development mode, it will insert/load each file separately. In production mode, it will compile them all into one big file.
+
+For CSS, basically the same thing:
+
+```html
+<%= stylesheet_link_tag "application" %>
+```
+
+It's a good idea to have separate JS/CSS manifest files for each controller/action/function/whatever. That way you aren't sending allllll of the app's JS logic for every single little thing. If you name them for your controllers (and add them to the asset load path in `config/initializers/assets.rb`) you can do this:
+
+```html
+<%= javascript_include_tag params[:controller] %>
+```
+
+Yeah. You can do that. `params` has the controller name and the action name right there for you to grab. How cool is that? How have you never noticed that? You IDIOT! YOU STUPID PIECE OF SHIT! WHO DO YOU THINK YOU ARE!? Ahem.
+
+But, from [this Learn lesson](https://github.com/learn-co-students/page-specific-javascript-rails-v-000):
+
+>The downside of this is we'd no longer be getting the benefits of asset concatenation or caching. The browser will have to make a separate request for this file in addition to the request for the main concatenated application.js file. The benefit of this strategy could be that we're less likely to invalidate the cache for our entire JS file if it is in pieces.
+
+There are other methods of SoC'ing your JS listed on that lesson page. Probably helpful to know them.
+
+## Miscellaneous useful gems
+
+### Using Bootstrap (gem method)
+
+Put this in your Gemfile:
+
+```ruby
+gem 'bootstrap-sass'
+```
+
+Run `bundle`, then put this in your CSS (SCSS) manifest file:
+
+```css
+@import "bootstrap-sprockets";
+@import "bootstrap";
+```
+
+Then put this in your JS manifest file:
+
+```js
+//= require bootstrap-sprockets
+```
+
+Noice. Now, any time you want to update Bootstrap, all ya gotta do is run `bundle update`.
+
+### File attachment/uploading with Paperclip
+
+See [this lesson](https://github.com/learn-co-students/rails-paperclip-readme-v-000) for a good overview of using the Paperclip gem to handle attaching files and uploads (e.g., adding an avatar image to a user record in the DB).
+
+### Pagination with Kaminari
+
+See [this lesson](https://github.com/learn-co-students/rails-kaminari-readme-v-000). Really great and simple pagination. Like crazy simple. So good.
+
+### Stellar + easy admin dashboard with Active Admin
+
+Holy balls. See [this lesson](https://github.com/learn-co-students/rails-active-admin-readme-v-000). So much incredible functionality for so little effort. Amazing.
+
+### Long-running tasks
+
+#### Long-running CSV processing
+
+See [this lesson](https://github.com/kjleitz/rails-long-running-tasks-readme-v-000). Pretty basic. But a decent overview I think.
+
+#### Moving to a worker (using Sidekiq)
+
+Picture doing that on a CSV file containing a bunch of song info, for example, with thousands of records. That takes a while. Move the logic to a worker (using Sidekiq) to run in the background:
+
+Add:
+
+```
+gem 'sidekiq'
+```
+
+...to your Gemfile. Install `redis` if you haven't already:
+
+```
+$ brew install redis
+```
+
+Then launch (and restart at login):
+
+```
+$ brew services start redis
+```
+
+Create a worker by adding an `app/workers` directory and making a file like this:
+
+```ruby
+# app/workers/songs_worker.rb
+
+class SongsWorker
+  include Sidekiq::Worker
+ 
+  def perform(songs_file)
+ 
+  end
+end
+```
+
+You give it an instance method of `#perform` which takes the data you need to operate on as an argument. Slap that logic in there:
+
+```ruby
+# app/workers/songs_worker.rb
+
+class SongsWorker
+  require 'csv'
+  include Sidekiq::Worker
+ 
+  def perform(songs_file)
+    CSV.foreach(songs_file, headers: true) do |song|
+      Song.create(title: song[0], artist_name: song[1])
+    end
+  end
+end
+```
+
+Back in our controller, in the song upload action, we can use the worker to perform the logic instead of doing it in the action itself (meaning it will no longer be blocking and synchronous):
+
+```ruby
+# app/controllers/songs_controller.rb
+
+class SongsController < ApplicationController
+  
+  # ...
+ 
+  def upload
+    SongsWorker.perform_async(params[:songs].path)
+    redirect_to customers_path
+  end
+end
+```
+
+Now, all ya gotta do is make sure redis is started (should have started if you did `brew services start redis`, and it _should_ start at login after that, but do `redis-server` I guess if not) and then start sidekiq by doing:
+
+```
+$ bundle exec sidekiq
+```
+
+...then start your Rails server, and you should be all set!
+
+### Making requests/API calls with Faraday
+
+Faraday is actually a pretty nifty little gem for wrapping some lower-level HTTP request libs. You can make and build requests similar to how you would using, say, Postman. This is how you might do some Foursquare searches with Faraday.
+
+Add to your Gemfile:
+
+```ruby
+gem 'faraday'
+```
+
+Create an HTML form for the search (for coffee shops):
+
+```html
+<!-- app/views/searches/search.html.erb -->
+
+<h1>Search for Coffee Shops Near Me</h1>
+<%= form_tag '/search' do %>
+  <%= label_tag :zipcode %>
+  <%= text_field_tag :zipcode %>
+  <%= submit_tag "Search!" %>
+<% end %>
+```
+
+In your controller:
+
+```ruby
+# app/controllers/searches_controller.rb
+
+class SearchesController < ApplicationController
+  def search
+  end
+
+  def foursquare
+    resp = Faraday.get 'https://api.foursquare.com/v2/venues/search' do |req|
+      req.params['client_id'] = client_id
+      req.params['client_secret'] = client_secret
+      req.params['v'] = '20160201'
+      req.params['near'] = params[:zipcode]
+      req.params['query'] = 'coffee shop'
+    end
+    
+    body_hash = JSON.parse(resp.body)
+    @venues = body_hash['response']['venues']
+    render 'search'
+  end
+end
+```
+
+Cool, right? `resp` now has a `#body` and `#status` (among other things) which are, respectively, the returned JSON data and the HTTP status code. Dig into the JSON to get what you want out of it (the venue list).
+
+We can change our view to include this data:
+
+```html
+<!-- app/views/searches/search.html.erb -->
+
+<h1>Search for Coffee Shops Near Me</h1>
+<%= form_tag '/search' do %>
+  <%= label_tag :zipcode %>
+  <%= text_field_tag :zipcode %>
+  <%= submit_tag "Search!" %>
+<% end %>
+
+<div>
+  <% if @venues %>
+    <ul>
+    <% @venues.each do |venue| %>
+      <li>
+        <%= venue["name"] %><br>
+        <%= venue["location"]["address"] %><br>
+        Checkins: <%= venue["stats"]["checkinsCount"] %>
+      </li>
+    <% end %>
+    </ul>
+  <% end %>
+</div>
+```
+
+Great! But what if we get an error back? If the request is malformed, it'll send a status code of `400` (bad request) back. We can check to see if the status code is `200` directly, or use a nice little abstracted method:
+
+```ruby
+# app/controllers/searches_controller.rb
+
+class SearchesController < ApplicationController
+  def search
+  end
+
+  def foursquare
+    resp = Faraday.get 'https://api.foursquare.com/v2/venues/search' do |req|
+      req.params['client_id'] = client_id
+      req.params['client_secret'] = client_secret
+      req.params['v'] = '20160201'
+      req.params['near'] = params[:zipcode]
+      req.params['query'] = 'coffee shop'
+    end
+    
+    body_hash = JSON.parse(resp.body)
+    if @resp.success?
+      @venues = body_hash["response"]["venues"]
+    else
+      @error = body_hash["meta"]["errorDetail"]
+    end
+    render 'search'
+  end
+end
+```
+
+Noice. Then just put some div to handle the error in the view, or whatever.
+
+What about a timeout?
+
+```ruby
+# app/controllers/searches_controller.rb
+
+class SearchesController < ApplicationController
+  def search
+  end
+
+  def foursquare
+    resp = Faraday.get 'https://api.foursquare.com/v2/venues/search' do |req|
+      # ...
+      req.options.timeout = 500
+    end
+    
+    # ...
+    
+    rescue Faraday::TimeoutError
+      @error = "There was a timeout. Please try again."
+    end
+    
+    render 'search'
+  end
+end
+```
+
+Neat. Set the timeout time you want, handle the error if it's over the limit.
+
+#### OAuth with Faraday
+
+There's some decent stuff in [this Learn lesson](https://github.com/kjleitz/web-auth-readme-v-000).
+
+#### Moving this crap out into Service Objects
+
+That shit doesn't belong in the controller. Put it in a service or whatever, like [this](https://github.com/learn-co-students/web-service-objects-readme-v-000). Allllllll that logic should go into a service object/class.
+
+## Ajax & Rails
+
+See the [Ajax notes](ajax.md), [XMLHttpRequest notes](xmlhttprequest.md), and the [JavaScript notes](javascript.md) for more deets. Here are a few quick tips:
+
+## Building an API
+
+### Returning HTML
+
+If you grab a post's comments by hitting `/posts/3/comments`, you'll get the layout's HTML back, too. You can disable layouts from being rendered with an explicit render:
+
+```ruby
+# app/controllers/comments_controller.rb
+
+# ...
+  render 'comments/index', layout: false
+# ...
+```
+
+You can actually just do this to render implicitly:
+
+```ruby
+# app/controllers/comments_controller.rb
+
+# ...
+  render layout: false
+# ...
+```
+
+Then you can just drop that HTML in like bam.
+
+### Returning JSON
+
+You can return JSON instead of HTML at the end of an action like this:
+
+```ruby
+render json: @comments
+```
+
+Literally the easiest thing. Turns that collection right into JSON. Wow.
+
+Also, if there's a request (like, imagine doing an Ajax request) and the content type it specifies is JSON, Rails will actually respond with the same-named file with a JSON extension in your views folder. Same as if the content type it requests is `script`, it will look for a JS file to return:
+
+```
+app
+ +-- controllers
+ +-- models
+ +-- views
+      +-- comments
+           +-- index.html.erb
+           +-- index.json.erb
+           +-- index.js.erb
+      +-- posts
+      +-- users
+ +-- ...
+```
+
+You can make this explicit by doing this:
+
+```ruby
+respond_to do |format|
+  format.html { render 'index.html', layout: false }
+  format.js { render 'index.js', layout: false }
+end
+```
+
+Cool.
+
+If you want a link to load a JS file by an AJAX request at its `href` instead of the HTML resource at the same location, you can take a shortcut:
+
+```html
+<%= link_to "Comments", comments_path %>
+<!-- redirects and renders comments/index.html  -->
+
+<%= link_to "Comments", comments_path, remote: true %>
+<!-- fetches comments/index.js w/ Ajax and prevents reload -->
+```
+
+That's called the "remote true" or "get script" pattern. Only in Rails. Kinda antithetical to using a framework like React or Angular or Ember. Basically you have like zero actual front-end JS, it just fetches JS from the server when you need the logic for whatever thing needs to happen.
+
+### Serializing objects
+
+Basically, making data into a string. Make an `app/serializers` directory with `<model>_serializer.rb` files and keep that shit out of the controllers. Use [this lesson](https://github.com/learn-co-students/diy-json-serializer-ruby-v-000) as reference.
+
+On the other hand, you can use `<model_object>.to_json` to do the same thing, which is awesome. You can even tell it to include properties which are relations of it (e.g., `post.to_json(include: :author)`). You can exclude stuff, too... check it out:
+
+```ruby
+post.to_json(only: [:title, :description, :id], include: [ author: { only: [:name]}])
+
+# or, prettier:
+
+post.to_json(
+  only: [
+    :title,
+    :description,
+    :id
+  ],
+  include: [
+    author: {only: [:name]}
+  ]
+)
+```
+
+...which would spit out:
+
+```json
+{
+  id: 1,
+  title: "A Blog Post By Stephen King",
+  description: "This is a blog post by Stephen King. It will probably be a movie soon.",
+  author: {
+    name: "Stephen King"
+  }
+}
+```
+
+### Serving different formats (HTML vs. JSON, etc.)
+
+Use a `respond_to` block:
+
+```ruby
+# posts_controller
+# ...
+  def show
+    @post = Post.find(params[:id])
+    respond_to do |format|
+      format.html { render :show }
+      format.json { render json: @post.to_json(only: [:title, :description, :id], include: [author: { only: [:name]}]) }
+    end
+  end
+```
+
+You can browse to `/posts/3` and get HTML back (default behavior), or to `/posts/3.html` for the same thing. Or, you can browse to `/posts/3.json` and it will return the JSON! You can also specify the content type you want in the headers of the request (`'Accept'` as `application/json`, I believe).
