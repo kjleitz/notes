@@ -2795,6 +2795,190 @@ post.to_json(
 }
 ```
 
+### Serializing with ActiveModel::Serializer (AMS)
+
+That `to_json` call can get kinda hairy. Using AMS is more like creating your own serializer, but it will serialize implicitly so it doesn't uglify your code! Noice. Also look up jbuilder if you get the chance (but it ties JSON templating to the views, whereas AMS ties it to the controllers... I like the latter approach, because it fits more with creating a back-end that's just a clean JSON API).
+
+Using AMS allows you to specify what you want to be inplicitly sent if you use `render json: <model_object>`.
+
+#### Creating/using a serializer
+
+Add it to your Gemfile (if you're still on Rails 4):
+
+```ruby
+gem 'active_model_serializers'
+```
+
+Then, `bundle install`. Run the following command to generate a serializer for your `Post` model:
+
+```
+$ rails g serializer post
+```
+
+That'll puke up something like this:
+
+```ruby
+# app/serializers/post_serializer.rb
+
+class PostSerializer < ActiveModel::Serializer
+  attributes :id
+end
+```
+
+Nice. Give it some more attributes from your actual `Post` model:
+
+```ruby
+class PostSerializer < ActiveModel::Serializer
+  attributes :id, :title, :description
+end
+```
+
+Now, back in your `posts_controller.rb`, you can get rid of that `to_json` call:
+
+```ruby
+  def show
+    @post = Post.find(params[:id])
+    respond_to do |format|
+      format.html { render :show }
+      format.json { render json: @post}
+    end
+  end
+```
+
+Et voilà! What whaaaaaat. Now, when you navigate to `/posts/1.json`, you'll get the following:
+
+```json
+{
+  id: 1,
+  title: "A Blog Post By Stephen King",
+  description: "This is a blog post by Stephen King. It will probably be a movie soon."
+}
+```
+
+Hell yeah.
+
+#### Including relationships in the serialized data
+
+What if that `Post` has an associated `Author` model? Don't you want that showing up in your JSON? Check it out:
+
+```
+$ rails g serializer author
+```
+
+Now you have an `Author` serializer. Go ahead and add the `name` attribute to it, like you did with the other attributes on `Post`. Then, specify the relationships:
+
+```ruby
+class PostSerializer < ActiveModel::Serializer
+  attributes :id, :title, :description
+  belongs_to :author
+end
+```
+
+Now, if you navigate to `/posts/1.json` you'll see this:
+
+```json
+{
+  id: 1,
+  title: "A Blog Post By Stephen King",
+  description: "This is a blog post by Stephen King. It will probably be a movie soon.",
+  author: {
+    id: 1,
+    name: "Stephen King"
+  }
+}
+```
+
+YEAH! That's IT! How cool is that?
+
+You can even do this:
+
+```ruby
+class AuthorSerializer < ActiveModel::Serializer
+  attributes :id, :name
+  has_many :posts
+end
+```
+
+...take a guess at what'll happen.
+
+Even better (last thing, I promise): say we don't care about the nested author's `id` when serving the `Post`'s JSON. We _could_ remove that attribute from the `AuthorSerializer`, but then what if we want to serve JSON of an author alone? We'd be taking it out of that, too. Instead, we can make a more specific serializer and explicitly use it to represent the `Post`'s author data:
+
+```
+$ rails g serializer post_author
+```
+
+...then we give the resulting serializer _just_ the author's name (all we want):
+
+```ruby
+class PostAuthorSerializer < ActiveModel::Serializer
+  attributes :name
+end
+```
+
+...and then, in our `PostSerializer`, we explicitly tell it to use the new serializer for the author:
+
+```ruby
+class PostSerializer < ActiveModel::Serializer
+  attributes :id, :title, :description
+  belongs_to :author, serializer: PostAuthorSerializer
+end
+```
+
+Now, by navigating to `/posts/1.json`, you should get back:
+
+```json
+{
+  id: 1,
+  title: "A Blog Post By Stephen King",
+  description: "This is a blog post by Stephen King. It will probably be a movie soon.",
+  author: {
+    name: "Stephen King"
+  }
+}
+```
+
+Awesome.
+
+#### Serializing form data to POST with Ajax (jQuery)
+
+Say you have a form that you want to submit with Ajax, rather than having it reload the page and all that jazz. jQuery gives you a really useful `serialize` method that will automatically serialize the form for you (which you can pass `this` in the event handler because it refers to the element being clicked on! Oh **boy!!!**):
+
+```js
+  $(function () {
+    $('form').submit(function(event) {
+      //prevent form from submitting the default way
+      event.preventDefault();
+      var values = $(this).serialize();
+      var posting = $.post('/posts', values);
+ 
+      posting.done(function(data) {
+        // TODO: handle response
+      });
+    });
+  });
+```
+
+Coooooool. That will put the data into JSON and POST it to `/posts` as params. Of course, you're gonna want to properly send stuff back afterward, because if you leave a redirect in the controller action you trigger, it will still redirect even though you tried to `e.preventDefault()`. If you send a JSON representation of the object back as a response, instead, you can do this with it:
+
+```js
+$(function () {
+    $('form').submit(function(event) {
+      //prevent form from submitting the default way
+      event.preventDefault();
+      var values = $(this).serialize();
+      var posting = $.post('/posts', values);
+ 
+      posting.done(function(data) {
+        var post = data;
+        $("#postTitle").text(post["title"]);
+        $("#postBody").text(post["description"]);
+      });
+    });
+  });
+```
+
+Now it creates the resource and displays the newly created data all without refreshing the page, and without "faking" showing the new data (as in, changing it to the "new" values without actually checking if it successfully went through on the server).
+
 ### Serving different formats (HTML vs. JSON, etc.)
 
 Use a `respond_to` block:
@@ -2812,3 +2996,16 @@ Use a `respond_to` block:
 ```
 
 You can browse to `/posts/3` and get HTML back (default behavior), or to `/posts/3.html` for the same thing. Or, you can browse to `/posts/3.json` and it will return the JSON! You can also specify the content type you want in the headers of the request (`'Accept'` as `application/json`, I believe).
+
+### Specifying status codes
+
+You wanna be granular in your status codes for an API:
+
+```ruby
+  def create
+    @post = Post.create(post_params)
+    render json: @post, status: 201
+  end
+```
+
+`201` goes further than a normal `200` (OK) status—it tells you that the resource was `created`!
