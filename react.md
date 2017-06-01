@@ -566,3 +566,75 @@ this.setState({comment: 'Hello'});
 ```
 
 See [Using State Correctly](https://facebook.github.io/react/docs/state-and-lifecycle.html#using-state-correctly).
+
+## Events
+
+React has its own event system (`SyntheticEvent`), which act pretty much the same as normal JS events (same interface: `stopPropagation()` and `preventDefault()` work, etc.), but they are an abstracted API so that React can provide a consistent interface to events across all browsers. Check [here](https://facebook.github.io/react/docs/events.html#supported-events) for a list of events.
+
+### Event handlers
+
+You can register handlers for an event by assigning a function to an inline handler, like a prop:
+
+```jsx
+class Tickler extends React.Component {
+  constructor() {
+    super();
+ 
+    this.tickle = this.tickle.bind(this);
+  }
+ 
+  tickle() {
+    console.log('Tee hee!');
+  }
+ 
+  render() {
+    return (
+      <button onClick={this.tickle}>Tickle me!</button>
+    );
+  }
+}
+```
+
+They always start with `on` and then the description of the event, in camelCase (e.g., `onClick`, `onKeyUp`, `onMouseDown`, `onFocus`, `onSubmit`, etc.). Pass it a reference to a function (named or anynoymous) and you're good to go.
+
+### Binding methods
+
+You're gonna want to bind `this` on methods created on component classes. Take this example, from the docs on the [differences when not using ES6 React syntax](https://facebook.github.io/react/docs/react-without-es6.html#autobinding) (the overall topic is obviously tangential):
+
+```jsx
+class SayHello extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {message: 'Hello!'};
+    // This line is important!
+    this.handleClick = this.handleClick.bind(this);
+  }
+
+  handleClick() {
+    alert(this.state.message);
+  }
+
+  render() {
+    // Because `this.handleClick` is bound, we can use it as an event handler.
+    return (
+      <button onClick={this.handleClick}>
+        Say hello
+      </button>
+    );
+  }
+}
+```
+
+Remember to bind your methods. I think that looks like a decent pattern.
+
+### Asynchronous access to events
+
+Events can't be accessed asynchronously, as they are [pooled](https://facebook.github.io/react/docs/events.html#event-pooling) (I don't know _exactly_ what that means, but that link does a good job of explaining the implications). You need to store a reference to the properties or whatever you're accessing on the event, because it will be nullified.
+
+**Edit:** Ah, okay, so pooling refers to this:
+
+> Event pooling means that whenever an event fires, its event data (an object) is sent to the callback. The object is then immediately cleaned up for later use. This is what we mean by 'pooling': the event object is in effect being sent back to the pool for use in a later event.
+> 
+> _(from [this Learn lesson](https://github.com/learn-co-students/react-events-in-detail-v-000))_
+
+The solution to pooling nullifying the event object is either to store a reference in a variable (`const target = event.target`) or to use `event.persist()`.
