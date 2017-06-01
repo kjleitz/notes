@@ -549,6 +549,8 @@ Keep state small. Have as little data in the state as possible. State should be 
 
 ### Changing state
 
+#### Use `setState()`
+
 Do not modify the state directly! Only modify the state directly when you are setting its initial value in the constructor.
 
 e.g., this will not re-render a component:
@@ -566,6 +568,91 @@ this.setState({comment: 'Hello'});
 ```
 
 See [Using State Correctly](https://facebook.github.io/react/docs/state-and-lifecycle.html#using-state-correctly).
+
+#### Nested state will get overwritten!
+
+The `setState()` function _merges_ the object you pass in into the `this.state` object. But it only does it one level deep. So, with an initial state of:
+
+```js
+{
+  theme: 'blue',
+  addressInfo: {
+    street: null,
+    number: null,
+    city: null,
+    country: null
+  },
+}
+```
+
+...and a `setState()` call like this:
+
+```js
+this.setState({
+  addressInfo: {
+    city: 'New York City',
+  },
+});
+```
+
+...you would get a `this.state` of:
+
+```js
+{
+  theme: 'blue',
+  addressInfo: {
+    city: 'New York City',
+  },
+}
+```
+
+Ouch. Instead of doing that, you have two options. One, use `Object.assign()`:
+
+```js
+this.setState({
+  addressInfo: Object.assign({}, this.state.addressInfo, {
+    city: 'New York City',
+  }),
+});
+```
+
+...to manually merge that deeper layer. You also could use the object spread operator (but you gotta enable that plugin in Babel, at the moment):
+
+```js
+this.setState({
+  addressInfo: {
+    ...this.state.addressInfo,
+    city: 'New York City',
+  },
+});
+```
+
+That would be really nice, wouldn't it? But stick with `Object.assign` for now, I guess.
+
+#### Setting state is asynchronous
+
+React batches state updates. Don't expect to be using the new state immediately after setting it:
+
+```js
+handleClick() {
+  this.setState({
+    hasBeenClicked: true,
+  });
+  console.log(this.state.hasBeenClicked); // prints false
+}
+```
+
+If you need something to happen after the state has been set, you can pass an optional callback function to `setState()`:
+
+```js
+handleClick() {
+  this.setState({
+    hasBeenClicked: true
+  }, function () {
+    console.log(this.state.hasBeenClicked); // prints true
+  });
+}
+```
 
 ## Events
 
