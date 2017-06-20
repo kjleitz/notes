@@ -59,7 +59,7 @@ git remote add upstream https://github.com/someone-else/someone-elses-project-fo
 …and to keep it synced, you can do this (I think `git pull` in this scenario does this all at once):
 
 ```
-git fetch upstream.        # <= fetches the upstream branches and their commits
+git fetch upstream         # <= fetches the upstream branches and their commits
 git checkout master        # <= enter your local master branch
 git merge upstream/master  # <= merge the changes from the upstream master
                            #    branch (or whatever branch you’re looking for, after the
