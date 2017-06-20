@@ -725,3 +725,107 @@ Events can't be accessed asynchronously, as they are [pooled](https://facebook.g
 > _(from [this Learn lesson](https://github.com/learn-co-students/react-events-in-detail-v-000))_
 
 The solution to pooling nullifying the event object is either to store a reference in a variable (`const target = event.target`) or to use `event.persist()`.
+
+## Forms
+
+### Differences between HTML and React JSX
+
+See [this helpful documentation](https://facebook.github.io/react/docs/forms.html).
+
+### Controlled and uncontrolled components
+
+Basically, a controlled component has its `value` prop set (e.g., on an `<input />`). React controls that component. If it doesn't have a `value` prop, it's uncontrolled, and may optionally have a `defaultValue` prop to set its initial value.
+
+In an uncontrolled component, its state is maintained in the DOM itself, and to retrieve that value, we'd either need access to the component itself or use an `onChange` handler on the component.
+
+In a controlled component, we're setting the value directly with React, so we need to update the value with any changes that the user actually makes:
+
+```jsx
+class ControlledInput extends React.Component {
+  constructor() {
+    super();
+ 
+    this.handleChange = this.handleChange.bind(this);
+ 
+    this.state = {
+      value: '',
+    };
+  }
+ 
+  handleChange(event) {
+    this.setState({
+      value: event.target.value,
+    });
+  }
+ 
+  render() {
+    return (
+      <input type="text" value={this.state.value} onChange={this.handleChange} />
+    );
+  }
+}
+```
+
+Seems weird, but this is the preferred way of doing things, because we manage that component's state _entirely_ in the React state, and we don't go back and forth from the DOM to access that value through it's internal state. Consider the following:
+
+> It might seem a little counterintuitive that we need to be so verbose, but this actually opens the door to additional functionality. For example, let's say we want to write an input that only takes in a number (let's pretend there is no `<input type="number">`). We can now validate the data the user enters before we set it on the state, allowing us to block any invalid values. If the input is invalid, we simply avoid updating the state, preventing the input from updating. We could optionally set another state property (for example, `isInvalidNumber`). Using that state property, we can show an error in our component to indicate that the user tried to enter an invalid value.
+> 
+> If we tried to do this using an uncontrolled component, the input would be entered regardless, since we don't have control over the internal state of the input. In our `onChange` handler, we'd have to roll the input back to its previous value, which is pretty tedious!
+> 
+> _(from [this Learn lesson](https://github.com/learn-co-students/react-forms-v-000))_
+
+## Component Lifecycle
+
+This is mostly taken from [this Learn lesson](https://github.com/learn-co-students/react-component-lifecycle-v-000). Has a good table for comparing utility of each hook. Also, check out the docs [here](https://facebook.github.io/react/docs/react-component.html) for a more complete lifecycle reference. It's pretty dece, yo.
+
+### Create stage
+
+Components need to be created (and rendered). Some hooks will be called during that process.
+
+#### `componentWillMount()`
+
+Occurs just _before_ `render()`; use it to change the initial state if necessary. Calling `this.setState` in this method will not trigger a re-render.
+
+#### `componentDidMount()`
+
+Occurs just _after_ `render()`; use it to set up expensive processes like fetching/updating data.
+
+### Update stage
+
+When state or props change, a component is re-rendered. Some hooks will be called during that process.
+
+#### `componentWillReceiveProps(nextProps)`
+
+This is called when the component's props (which it has received from a parent) change and trigger a re-render. You could use this to change state based on the new props. Apparently the props aren't always _actually_ different, so don't assume so until you've checked.
+
+#### `shouldComponentUpdate(nextProps, nextState) => Boolean`
+
+Called just _before_ a component re-renders. You can prevent an unnecessary re-render here by comparing props and state and whatever. Return a boolean to decide.
+
+#### `componentWillUpdate(nextProps, nextState)`
+
+Called just after `shouldComponentUpdate` and just before `render`. Useually you use this method to update integrations with third party libraries. Cannot use `setState` in this method.
+
+#### `render()`
+
+Obvious. Required.
+
+#### `componentDidUpdate(prevProps, prevState)`
+
+Called just _after_ the re-render. Use it to update any third party libraries if they happen to need an update due to the re-render. Receives previous props and state as arguments! That seems pretteh useful, since you have access to the new ones in `this.state` and `this.props`.
+
+### Delete stage
+
+#### `componentWillUnmount()`
+
+Gets called just before a component is deleted. Use it to tear down anything you set up in `componentWillMount()`.
+
+> For example, if you had a component that displays the weather data in your home town, you might have set it up to re-fetch the updated weather information every 10 seconds in `componentDidMount`. When the component gets deleted, you wouldn't want to continue doing this data-fetching, so you'd have to get rid of what was set up in `componentWillUnmount`.
+
+## Separation of concerns
+
+### Presentational vs. container components
+
+Keep presentational (entirely UI) components small and stateless. Nothing but a render. Put logic in a container component (created for that precise purpose), and pass data into presentational components through props. For event handling in presentational components, use callbacks (passed in as props) to call functions from a container.
+
+See [here](https://css-tricks.com/learning-react-container-components/).
