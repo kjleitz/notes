@@ -169,6 +169,8 @@ function createStore(reducer) {
     render();
   }
   
+  dispatch({ type: '@@INIT' });
+  
   return {
     getState,
     dispatch
@@ -186,3 +188,75 @@ button.addEventListener('click', function() {
 ```
 
 Cool. [Good Learn article on this store pattern](https://github.com/learn-co-students/redux-create-store-v-000).
+
+## Redux with React
+
+To use the Redux/store pattern with React, we can import the reducer and the store creator, initialize a `store` object, and pass it down as a prop. Basically:
+
+```jsx
+  // ./src/index.js
+ 
+  import React from 'react';
+  import ReactDOM from 'react-dom';
+  import App from './App';
+  import changeCount from './reducers/changeCount';
+  import createStore from './createStore';
+ 
+  const store = createStore(changeCount);
+ 
+  export function render() {
+    ReactDOM.render(
+      <App store={store} />,
+      document.getElementById('root')
+    );
+  }
+
+  store.dispatch({ type: '@@INIT' });
+```
+
+...where you have a reducer:
+
+```js
+// ./src/reducers/changeCount.js
+ 
+export default function changeCount(state = {count: 0}, action) {
+  switch (action.type) {
+    case 'INCREASE_COUNT':
+      return { count: state.count + 1 };
+    default:
+      return state;
+  };
+};
+```
+
+...and a store creator:
+
+```js
+// ./src/createStore.js
+
+import { render } from './index.js';
+ 
+export default function createStore(reducer) {
+  let state;
+ 
+  function dispatch(action) {
+    state = reducer(state, action);
+    render()
+  }
+ 
+  function getState() {
+    return state;
+  }
+ 
+  return {
+    dispatch,
+    getState
+  };
+};
+```
+
+Now that the store is passed to the `App` component via props, it can be accessed by, say, a button, which might handle click events by calling `props.store.dispatch({ type: 'INCREASE_COUNT' })`.
+
+I don't like this. There's circular importing with `render` and `createStore`, and it doesn't let React govern the render process, it just renders the whole DOM again. Silly. But I guess it's just demonstrative of the pattern, not how you would actually do renders.
+
+Taken from [this Learn lesson](https://github.com/kjleitz/integrating-react-and-redux-codealong-v-000).
