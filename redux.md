@@ -255,7 +255,27 @@ export default function createStore(reducer) {
 };
 ```
 
-Now that the store is passed to the `App` component via props, it can be accessed by, say, a button, which might handle click events by calling `props.store.dispatch({ type: 'INCREASE_COUNT' })`.
+Now that the store is passed to the `App` component via props, it can be accessed by, say, a button, which might handle click events by calling `props.store.dispatch({ type: 'INCREASE_COUNT' })`. Like this:
+
+```jsx
+// ./src/components/Counter.js
+
+import React from 'react'
+
+export default (props) => {
+  
+  const handleClick = (event) => {
+    props.store.dispatch({ type: 'INCREASE_COUNT' });
+  };
+
+  return (
+    <div>
+      <button onClick={handleClick} >Click Me</button>
+      <div>{props.store.getState().count}</div>
+    </div>
+  );
+};
+```
 
 I don't like this. There's circular importing with `render` and `createStore`, and it doesn't let React govern the render process, it just renders the whole DOM again. Silly. But I guess it's just demonstrative of the pattern, not how you would actually do renders.
 
