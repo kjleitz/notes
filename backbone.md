@@ -301,6 +301,85 @@ var HomeView = Backbone.View.extend({
 
 Noice. Pretty easy, right?
 
+Another more complex implementation, based on the muppet metaphor:
+
+```js
+var KermitModel = Backbone.Model.extend({
+  url: '/muppets/1',
+  defaults: {
+    name: '',
+    occupation: ''
+  }
+});
+
+var KermitView = Backbone.View.extend({
+  el: '#kermit-view',
+
+  initialize: function() {
+    this.listenTo(this.model, 'sync change', this.render);
+    this.model.fetch();
+    this.render();
+  },
+
+  render: function() {
+    var html = '<b>Name:</b> ' + this.model.get('name');
+    html += ', occupation: ' + this.model.get('occupation');
+    this.$el.html(html);
+    return this;
+  }
+});
+
+var kermit = new KermitModel();
+var kermitView = new KermitView({model: kermit});
+```
+
+That way, you get a re-render on `sync` or `change` events on the model. You also `GET /muppets/1` on initialization, and render it immediately. Cool.
+
+### Rendering with a template
+
+We could refactor that previous example to use an underscore template:
+
+```html
+<div id="kermit-view"></div>
+
+<script type="text/template" id="muppet-tmpl">
+  <p><a href="/muppets/<%= id %>"><%= name %></a></p>
+  <p>Job: <i><%= occupation %></i></p>
+</script>
+
+<script>
+var KermitModel = Backbone.Model.extend({
+  url: '/muppets/1',
+  defaults: {
+    name: '',
+    occupation: ''
+  }
+});
+
+var KermitView = Backbone.View.extend({
+  el: '#kermit-view',
+  template: _.template($('#muppet-tmpl').html()),
+
+  initialize: function() {
+    this.listenTo(this.model, 'sync change', this.render);
+    this.model.fetch();
+    this.render();
+  },
+
+  render: function() {
+    var html = this.template(this.model.toJSON());
+    this.$el.html(html);
+    return this;
+  }
+});
+
+var kermit = new KermitModel();
+var kermitView = new KermitView({model: kermit});
+</script>
+```
+
+Notice that this template is cached by the view class. That makes using it a lot faster.
+
 ### Using views
 
 Maybe you want to create a list:
@@ -350,6 +429,64 @@ var HomeView = Backbone.View.extend({
 
 Check it out. You create a new `ListView` view object, then `render()` it so you get the element all created (which is stored in its `el`), then append its `el` to the `HomeView`'s element. Useful chaining!
 
+### Attaching models and collections to views
+
+Check it out (from [Backbone, The Primer](https://github.com/jashkenas/backbone/wiki/Backbone%2C-The-Primer)):
+
+>A view is responsible for binding its document element to a model or a collection instance, provided to the view as a constructor option. For example:
+>
+>```js
+>var myModel = new MyModel();
+>var myView = new MyView({model: myModel});
+>
+>// The provided model is attached directly onto the view:
+>console.log(myView.model === myModel); // << true
+>Attach a model to a view by providing a {model: ...} constructor option:
+>
+>var KermitModel = Backbone.Model.extend({
+>  url: '/muppets/1',
+>  defaults: { . . . }
+>});
+>  
+>var MuppetsListItemView = Backbone.View.extend({
+>  tagName: 'li',
+>  className: 'muppet',
+>  
+>  initialize: function() {
+>    console.log(this.model); // << KermitModel!!
+>  }
+>});
+>  
+>// Create Model and View instances:
+>var kermitModel = new KermitModel();
+>var kermitView = new MuppetsListItemView({model: kermitModel});
+>```
+>
+>Attach a collection to a view by providing a {collection: ...} constructor option:
+>
+>```js
+>var MuppetsModel = Backbone.Model.extend({ . . . });
+>  
+>var MuppetsCollection = Backbone.Collection.extend({
+>  model: MuppetsModel,
+>  url: '/muppets'
+>});
+>  
+>var MuppetsListView = Backbone.View.extend({
+>  el: '#muppets-list',
+>  
+>  initialize: function() {
+>    console.log(this.collection); // << MuppetsCollection!!
+>  }
+>});
+>
+>// Create Collection and View instances:
+>var muppetsList = new MuppetsCollection();
+>var muppetsView = new MuppetsListView({collection: muppetsList});
+>```
+
+You can use the data associated with the view with `this.model` or `this.collection`, simple as that. Noice.
+
 ## Routing
 
 ### Starting the router
@@ -391,3 +528,37 @@ var AppRouter = Backbone.Router.extend({
 ```
 
 Not sure beyond that, but probably need to know it.
+
+## Events
+
+Views need to be able to capture UI events, so you can put an `events` object on the view object which maps DOM events (user input) to function names:
+
+```html
+<div id="kermit-view">
+  <label>Name: <input type="text" name="name" class="name"></label>
+  <button class="save">Save</button>
+</div>
+
+<script>
+var KermitView = Backbone.View.extend({
+  el: '#kermit-view',
+
+  events: {
+    'change .name': 'onChangeName',
+    'click .save': 'onSave'
+  },
+
+  onChangeName: function(evt) {
+    this.model.set('name', evt.currentTarget.value);
+  },
+
+  onSave: function(evt) {
+    this.model.save();
+  }
+});
+
+var kermitView = new KermitView({model: new KermitModel()});
+</script>
+```
+
+That's... pretty freaking cool. Declare an event trigger as `"<eventName> <selector>"`
