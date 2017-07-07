@@ -380,6 +380,8 @@ var kermitView = new KermitView({model: kermit});
 
 Notice that this template is cached by the view class. That makes using it a lot faster.
 
+Templates are also used this way with Marionette.js, so this is a common concept.
+
 ### Using views
 
 Maybe you want to create a list:
@@ -531,6 +533,8 @@ Not sure beyond that, but probably need to know it.
 
 ## Events
 
+### Backbone.Events (built-in)
+
 Views need to be able to capture UI events, so you can put an `events` object on the view object which maps DOM events (user input) to function names:
 
 ```html
@@ -561,4 +565,93 @@ var kermitView = new KermitView({model: new KermitModel()});
 </script>
 ```
 
-That's... pretty freaking cool. Declare an event trigger as `"<eventName> <selector>"`
+That's... pretty freaking cool. Declare an event trigger as `"<eventName> <selector>"`.
+
+### Backbone.Radio (Marionette)
+
+Backbone.Radio isn't built in, but it's pretty awesome. It lets you make a namespaced "message bus" object (a `Backbone.Radio.channel(channelName)`), on which you can set event listeners and even use the request-response pattern of event/message passing. [Check it out](https://github.com/marionettejs/backbone.radio) (good explanation in the README). Totally worth it.
+
+Things to check out:
+
+- setting a `default` reply
+- setting multiple replies with an object
+- make multiple requests with spaces
+- `replyOnce()` - only reply once
+- `stopReplying()` - remove a reply handler (by request name, optionally callback, optionally context)
+- `reset()` - remove all handlers from the channel
+- channel activity logging
+
+## Marionette
+
+_Much of this section is taken from [this](https://benmccormick.org/marionette-explained/) series._
+
+Marionette is a framework built with Backbone. Here are some highlights:
+
+### Models
+
+#### Serializing data to send to views
+
+By default, Marionette simply calls `toJSON()` on the model to generate the data to send to the view. However, you can override `serializeData()` on the model (WAIT I THINK THIS IS ACTUALLY ON THE VIEW, I AM IDIOT) to do more complicated things:
+
+```js
+serializeData: function () {
+    var active = this.collection.getActive().length;
+    var total = this.collection.length;
+
+    return {
+        activeCount: active,
+        totalCount: total,
+        completedCount: total - active
+    };
+},
+```
+
+The `serializeData()` method is like a "ViewModel" pattern.
+
+### Views
+
+#### Rendering data from models
+
+Once the serialized data has been created with `serializeData()` on the model (NOPE, VIEW), it's passed to the `View`'s `render()` which looks for a template to render with the data. The template is set on the `View`'s `template` property (or set by the `getTemplate` method if you need to do it dynamically). Underscore templates by default. Easy to switch, though.
+
+#### ItemView vs. CollectionView
+
+You can extend from `Marionette.ItemView` to represent a single data object (can be a model or a collection) and render a template with it. You can also extend from `Marionette.CollectionView` to represent a collection, and it will iterate over the collection and render a view for each model (you can use the same view for every collection, or you can mix and match dynamically).
+
+An ItemView might look like this:
+
+```js
+var TodoView= Marionette.ItemView.extend({
+    tagName: 'li',
+    template: '<span class="checkbox" {{checked}}></span><span class="text">{{ text}}</span><span class="delete"></span>',
+    events: {
+        'click .checkbox': 'toggleChecked',
+        'click .delete' : 'deleteItem'
+    },
+
+    serializeData: function() {
+        return {
+            checked: this.model.get('checked') ? 'checked':'',
+            text: this.model.get('text')
+        };
+    },
+
+    toggleChecked: function() {
+        //logic for checking the box
+    },
+
+    deleteItem : function () {
+        //logic for deleting the todo
+    }
+});
+```
+
+...whereas a CollectionView might look like this:
+
+```js
+var TodoListView = Marionette.CollectionView.extend({
+    childView: TodoView,
+    tagName: 'ul'
+
+});
+```
