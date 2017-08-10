@@ -2453,6 +2453,10 @@ See [this lesson](https://github.com/learn-co-students/rails-kaminari-readme-v-0
 
 Holy balls. See [this lesson](https://github.com/learn-co-students/rails-active-admin-readme-v-000). So much incredible functionality for so little effort. Amazing.
 
+### Pub/sub functionality with broadcasting events
+
+Wisper. Seems great. https://github.com/krisleech/wisper – you can even do async
+
 ### Long-running tasks
 
 #### Long-running CSV processing
