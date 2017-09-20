@@ -154,7 +154,7 @@ Then, you can `rake db:migrate` like a normie.
 Looks like generating the resource is a good standard action. It doesn't generate a lot of the unnecessary stuff that generating a scaffold or a controller would.
 
 ```bash
-rails g resource Account name:string payment_status:string`
+rails g resource Account name:string payment_status:string
 ```
 
 ## Routing
