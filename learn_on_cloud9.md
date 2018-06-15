@@ -143,7 +143,7 @@ Again, when you use one of these commands, a little window will pop up in the to
 
 These commands create a `labs` directory if there isn't one, and makes sure you always start out in the labs directory in the terminal, so you can easily `cd` into an existing lab:
 
-- `mkdir ~/code/labs` - If you get an error saying that this directory already exists, that's perfectly fine
+- `mkdir -p ~/code/labs` - If you get an error saying that this directory already exists, that's perfectly fine
 - `echo "cd ~/code/labs" >> ~/.bash_profile` - This adds a final line to your `.bash_profile` that ensures that you start out in the `labs` directory when you make a new terminal window
 
 ## Seeing and using our bash configuration changes
