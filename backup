@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+if [ -z "$(git -C "$SCRIPT_DIR" status --porcelain)" ]; then
+  echo 'Nothing to back up!'
+else
+  git -C "$SCRIPT_DIR" add -A
+  git -C "$SCRIPT_DIR" commit -m "cron backup"
+  git -C "$SCRIPT_DIR" push
+fi
+
